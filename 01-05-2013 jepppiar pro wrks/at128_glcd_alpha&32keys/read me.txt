@@ -1,0 +1,6 @@
+this was lastly tested at blore with
+1)team name entries
+2)indivdual team scores update on glcd
+
+issues pertaining:
+the un used keys when pressed, resulted in producing garbage values in the glcd.

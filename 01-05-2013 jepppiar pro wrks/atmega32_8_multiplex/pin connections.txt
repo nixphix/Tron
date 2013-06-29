@@ -1,0 +1,16 @@
+porta:
+btimeout    	pc7
+bfoul		pc6 	
+QT		pc5
+AF		pc4
+sec%10		pc3  (9)
+sec/10		pc2  (5)
+minutes%10	pc1  (5)
+minutes/10	pc0  (1)
+
+portb:
+AS/10		pc4
+AS%10		pc3
+BS/10		pc2
+BS%10		pc1
+AT		pc0
