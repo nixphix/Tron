@@ -15,3 +15,17 @@
 *.exe
 *.out
 *.app
+
+##########
+## AVR
+##########
+*.lst
+*.lss
+*.asm
+*.hex
+*.elf
+*.dep
+*.sym
+*.map
+*.eep
+Makefile
