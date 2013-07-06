@@ -130,7 +130,7 @@ ISR(TIMER1_OVF_vect)
 		if(m<5)
 		{
 			
-			data=pgm_read_byte(( ptr+((home[chr]-' ')*5)+m++));
+			data=pgm_read_byte(( ptr+((home[chr]-' ')*5)+m));
 		}
 		else  
 		{
@@ -143,10 +143,9 @@ ISR(TIMER1_OVF_vect)
 			HC595DataLow();
 
 		HC595Pulse();
-		
 
 
-		if(m==7) // the number of columns for a single character
+		if(++m==7) // the number of columns for a single character
 		{
 			chr++;
 			m=0;
@@ -157,10 +156,10 @@ ISR(TIMER1_OVF_vect)
 		
 	}
 	HC595Latch();
-	SelectRow(row++);
+	SelectRow(row);
 	
 
-	if(row==DISP_ROW_CNT)
+	if(++row==DISP_ROW_CNT)
 	{
 		
 		row=0;
