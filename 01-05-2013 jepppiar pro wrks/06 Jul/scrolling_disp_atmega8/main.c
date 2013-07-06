@@ -61,7 +61,7 @@ void SelectRow(uint8_t r)
 {
 	
 	PORTD&=(~(1<<PD7));
-	PORTD&=(~(1<<PD6));
+	//PORTD&=(~(1<<PD6)); PC5 is assigned 
 	PORTC&=0x00;
 
 	switch(r)
@@ -82,7 +82,7 @@ void SelectRow(uint8_t r)
 			PORTC|=(1<<PC4);
 			break;
 		case 5:
-			PORTD|=(1<<PD6);
+			PORTC|=(1<<PC5);
 			break;
 		case 6:
 			PORTD|=(1<<PD7);
@@ -113,10 +113,10 @@ ISR(TIMER1_OVF_vect)
 {
 	PORTC=0x00;
 	PORTD&=(~(1<<PD7));
-	PORTD&=(~(1<<PD6));
+	//PORTD&=(~(1<<PD6)); PC5 is assigned to this
 	TCNT1=0xFFC0;	
 	static uint8_t row;
-	static uint16_t cnt=0;cnt++;
+	static uint16_t cnt=1;
 	
 	int8_t col;
 
@@ -127,10 +127,10 @@ ISR(TIMER1_OVF_vect)
 	{
 		uint8_t data;
 		
-		if(m!=5)
+		if(m<5)
 		{
 			
-			data=pgm_read_byte(( ptr+((string[chr]-' ')*5)+m));
+			data=pgm_read_byte(( ptr+((string[chr]-' ')*5)+m++));
 		}
 		else  
 		{
@@ -145,9 +145,8 @@ ISR(TIMER1_OVF_vect)
 		HC595Pulse();
 		
 
-		m++;
 
-		if(m==6) // the number of columns for a single character
+		if(m==7) // the number of columns for a single character
 		{
 			chr++;
 			m=0;
@@ -158,10 +157,9 @@ ISR(TIMER1_OVF_vect)
 		
 	}
 	HC595Latch();
-	SelectRow(row);
+	SelectRow(row++);
 	
 
-	row++;
 	if(row==DISP_ROW_CNT)
 	{
 		
