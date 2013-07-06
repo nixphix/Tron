@@ -8,15 +8,15 @@
 
 volatile PGM_P ptr=smallFont;
 
-volatile uint16_t ii,iii;
+//volatile uint16_t ii,iii; not used
 
 //Message to display
-volatile char string[]="TEAMABCD";
+volatile char home[]="TEAMABCD";
 volatile uint8_t len;
 
 
 #define DISP_ROW_CNT 7
-#define DISP_COL_CNT 40// it takes 7 columns for a character but frst 6 is only data and next 1 is null
+#define DISP_COL_CNT 40// it takes 7 columns for a character but frst 5 is only data and next 2 is null
 
 #define HC595_PORT 	PORTB	
 #define HC595_DDR 	DDRB
@@ -100,8 +100,8 @@ int main(void)
 	DDRD=0XF0;
 	sei();
 	HC595Init();
-	len=strlen(string);
-	ii=iii=0;
+	len=strlen(home);
+	//ii=iii=0; not used
 	while(1)
 	{
 	}
@@ -116,7 +116,7 @@ ISR(TIMER1_OVF_vect)
 	//PORTD&=(~(1<<PD6)); PC5 is assigned to this
 	TCNT1=0xFFC0;	
 	static uint8_t row;
-	static uint16_t cnt=1;
+	//static uint16_t cnt=1; not used
 	
 	int8_t col;
 
@@ -130,7 +130,7 @@ ISR(TIMER1_OVF_vect)
 		if(m<5)
 		{
 			
-			data=pgm_read_byte(( ptr+((string[chr]-' ')*5)+m++));
+			data=pgm_read_byte(( ptr+((home[chr]-' ')*5)+m++));
 		}
 		else  
 		{
