@@ -11,12 +11,12 @@ volatile PGM_P ptr=smallFont;
 //volatile uint16_t ii,iii; not used
 
 //Message to display
-volatile char home[]="TEAMABCD";
+volatile char home[]=" HOME  AWAY";//,away[]="AWAY";
 volatile uint8_t len;
 
 
 #define DISP_ROW_CNT 7
-#define DISP_COL_CNT 40// it takes 7 columns for a character but frst 5 is only data and next 2 is null
+#define DISP_COL_CNT 80// it takes 7 columns for a character but frst 5 is only data and next 2 is null
 
 #define HC595_PORT 	PORTB	
 #define HC595_DDR 	DDRB
