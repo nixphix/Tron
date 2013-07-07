@@ -20,15 +20,18 @@
 #define HC595DataLow() (HC595_PORT&=(~(1<<HC595_DS_POS)))
 
 volatile PGM_P ptr=smallFont;
-volatile uint8_t len;  // max number of char in msg
+volatile uint8_t len;  // max number of char in message
 
 //Message to display
-volatile char msg[]={0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,'H','O','M','E',0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,'A','W','A','Y',0x1F,0x1F,0x1F,0x1F,0x1F,};
+volatile char message[80],messageA[40],messageB[40] ;//={0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,'H','O','M','E',0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,'A','W','A','Y',0x1F,0x1F,0x1F,0x1F,0x1F,};
 
 void HC595Init(void);
 void HC595Pulse(void);
 void HC595Latch(void);
 void SelectRow(uint8_t);
+void BuildMsg(void);
+void BuildString(uint8_t lpad,uint8_t rpad,char msg[],char message[]);
+
 
 void HC595Init()
 {
@@ -86,7 +89,109 @@ void SelectRow(uint8_t r)
 			break;
 	}
 }
+	
+void BuildMsg()
+{
+  char teamA[]="Home", teamB[]="AWAY";
+  char msg[80];
+  uint8_t len = strlen(teamA),lpad=0,rpad=0;
+
+    switch(len)
+	{
+	   case 0:
+	    lpad=6;rpad=7;
+	    strcpy(teamA,"HOME");
+	    break;
 		
+	   case 1:
+	    lpad=rpad=17;
+		break;
+		
+	   case 2:
+	    lpad=13;rpad=14;
+		break;
+		
+	   case 3:
+	    lpad=rpad=10;
+		break;
+		
+	   case 4:
+	    lpad=6;rpad=7;
+		break;
+		
+	   case 5:
+	    lpad=rpad=3;
+		break;
+		
+	   case 6:
+	    lpad=rpad=0;
+		break;
+		
+	   default:
+        lpad=rpad=0;	
+	}
+    BuildString(lpad,rpad,teamA,*messageA);
+	
+    switch(len)
+	{
+	   case 0:
+	    lpad=6;rpad=7;
+	    strcpy(teamA,"AWAY");
+	    break;
+		
+	   case 1:
+	    lpad=rpad=17;
+		break;
+		
+	   case 2:
+	    lpad=13;rpad=14;
+		break;
+		
+	   case 3:
+	    lpad=rpad=10;
+		break;
+		
+	   case 4:
+	    lpad=6;rpad=7;
+		break;
+		
+	   case 5:
+	    lpad=rpad=3;
+		break;
+		
+	   case 6:
+	    lpad=rpad=0;
+		break;
+		
+	   default:
+        lpad=rpad=0;	
+	}
+    BuildString(lpad,rpad,teamA,*messageB);
+}
+
+void BuildString(uint8_t lpad,uint8_t rpad,char msg[],char message[])
+{
+  uint8_t msglen = strlen(msg)>6?6:strlen(msg);
+  for(int i=lpad+rpad+msglen,index = 0;i>0;index++,i--)
+  {
+     if(lpad)
+	 {
+	   lpad--;
+	   message[index] = 0x1F; 
+	 }
+	 else if(msglen)
+	 {
+	   message[index] = strupr(msg[i-(rpad+msglen)]);
+	   msglen--;
+	 }
+	 else if(rpad)
+	 {
+	   rpad--;
+	   message[index] = 0x1F; 
+	 }
+  }  
+}
+	
 int main(void)
 {
 	
@@ -95,15 +200,17 @@ int main(void)
 	TCCR1B = (1<<CS12)|(0<<CS11)|(0<<CS10); 
 	DDRC=0xFF;
 	DDRD=0XF0;
+	
+	BuildMsg();
+	
 	sei();
 	HC595Init();
 	//ii=iii=0; not used
-	len = strlen(msg);
+	len = strlen(message);
 	while(1)
 	{
 	}
 	return 0;
-	
 }
 
 ISR(TIMER1_OVF_vect)
@@ -123,7 +230,7 @@ ISR(TIMER1_OVF_vect)
 	for(col=0;col<DISP_COL_CNT;col++)
 	{
 	
-		if(msg[chr] == 0x1F)  
+		if(message[chr] == 0x1F)  
 		{
 			data = 0x00;
 			chr++;
@@ -132,7 +239,7 @@ ISR(TIMER1_OVF_vect)
 		else if(m<5)
 		{
 			
-			data=pgm_read_byte(( ptr+((msg[chr]-' ')*5)+m));
+			data=pgm_read_byte(( ptr+((message[chr]-' ')*5)+m));
 		}
 		else
 		{
