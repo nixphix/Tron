@@ -94,7 +94,6 @@ void SelectRow(uint8_t r)
 void BuildMsg()
 {
   char teamA[]="Home", teamB[]="AWAY";
-  char msg[80];
   uint8_t len = strlen(teamA),lpad=0,rpad=0;
 
     switch(len)
@@ -170,6 +169,10 @@ void BuildMsg()
         lpad=rpad=0;	
 	}
     BuildStringB(lpad,rpad,teamB);
+	
+	strcpy(message,messageA);
+	strcat(message,messageB);
+	
 }
 
 void BuildStringA(uint8_t lpad,uint8_t rpad,char msg[])
