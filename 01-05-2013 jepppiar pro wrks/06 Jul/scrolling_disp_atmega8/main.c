@@ -99,7 +99,7 @@ void BuildMsg()
     switch(len)
 	{
 	   case 0:
-	    lpad=6;rpad=7;
+	    lpad=7;rpad=6;
 	    strcpy(teamA,"HOME");
 	    break;
 		
@@ -108,7 +108,7 @@ void BuildMsg()
 		break;
 		
 	   case 2:
-	    lpad=13;rpad=14;
+	    lpad=14;rpad=13;
 		break;
 		
 	   case 3:
@@ -116,7 +116,7 @@ void BuildMsg()
 		break;
 		
 	   case 4:
-	    lpad=6;rpad=7;
+	    lpad=7;rpad=6;
 		break;
 		
 	   case 5:
@@ -170,15 +170,15 @@ void BuildMsg()
 	}
     BuildStringB(lpad,rpad,teamB);
 	
-	strcpy(message,messageA);
-	strcat(message,messageB);
+	strcpy(message,strupr(messageA));
+	strcat(message,strupr(messageB));
 	
 }
 
 void BuildStringA(uint8_t lpad,uint8_t rpad,char msg[])
 {
   uint8_t msglen = strlen(msg)>6?6:strlen(msg);
-  for(int i=lpad+rpad+msglen,index = 0;i>0;index++,i--)
+  for(int i=lpad+rpad+msglen,index = 0,j=0;i>0;index++,i--)
   {
      if(lpad)
 	 {
@@ -187,7 +187,7 @@ void BuildStringA(uint8_t lpad,uint8_t rpad,char msg[])
 	 }
 	 else if(msglen)
 	 {
-	   messageA[index] = msg[i-(rpad+msglen)];
+	   messageA[index] = msg[j++];
 	   msglen--;
 	 }
 	 else if(rpad)
@@ -201,7 +201,7 @@ void BuildStringA(uint8_t lpad,uint8_t rpad,char msg[])
 void BuildStringB(uint8_t lpad,uint8_t rpad,char msg[])
 {
   uint8_t msglen = strlen(msg)>6?6:strlen(msg);
-  for(int i=lpad+rpad+msglen,index = 0;i>0;index++,i--)
+  for(int i=lpad+rpad+msglen,index = 0,j=0;i>0;index++,i--)
   {
      if(lpad)
 	 {
@@ -210,7 +210,7 @@ void BuildStringB(uint8_t lpad,uint8_t rpad,char msg[])
 	 }
 	 else if(msglen)
 	 {
-	   messageB[index] = msg[i-(rpad+msglen)];
+	   messageB[index] = msg[j++];
 	   msglen--;
 	 }
 	 else if(rpad)
