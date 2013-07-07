@@ -11,7 +11,7 @@ volatile PGM_P ptr=smallFont;
 //volatile uint16_t ii,iii; not used
 
 //Message to display
-volatile char home[]=" HOME  AWAY";//,away[]="AWAY";
+volatile char msg[]=" HOME  AWAY ";
 volatile uint8_t len;
 
 
@@ -100,7 +100,7 @@ int main(void)
 	DDRD=0XF0;
 	sei();
 	HC595Init();
-	len=strlen(home);
+	len=strlen(msg);
 	//ii=iii=0; not used
 	while(1)
 	{
@@ -130,7 +130,7 @@ ISR(TIMER1_OVF_vect)
 		if(m<5)
 		{
 			
-			data=pgm_read_byte(( ptr+((home[chr]-' ')*5)+m));
+			data=pgm_read_byte(( ptr+((msg[chr]-' ')*5)+m));
 		}
 		else  
 		{
