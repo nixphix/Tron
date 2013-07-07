@@ -6,7 +6,6 @@
 
 #include "font5x7.h"
 
-#define len 12 // max number of char in msg
 #define DISP_ROW_CNT 7
 #define DISP_COL_CNT 80// it takes 7 columns for a character but frst 5 is only data and next 2 is null
 
@@ -21,9 +20,10 @@
 #define HC595DataLow() (HC595_PORT&=(~(1<<HC595_DS_POS)))
 
 volatile PGM_P ptr=smallFont;
+volatile uint8_t len;  // max number of char in msg
 
 //Message to display
-volatile char msg[]=" HOME  AWAY ";
+volatile char msg[]={0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,'H','O','M','E',0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,'A','W','A','Y',0x1F,0x1F,0x1F,0x1F,0x1F,};
 
 void HC595Init(void);
 void HC595Pulse(void);
@@ -98,6 +98,7 @@ int main(void)
 	sei();
 	HC595Init();
 	//ii=iii=0; not used
+	len = strlen(msg);
 	while(1)
 	{
 	}
@@ -121,15 +122,21 @@ ISR(TIMER1_OVF_vect)
 
 	for(col=0;col<DISP_COL_CNT;col++)
 	{
-				
-		if(m<5)
+	
+		if(msg[chr] == 0x1F)  
+		{
+			data = 0x00;
+			chr++;
+			m--;
+		}
+		else if(m<5)
 		{
 			
 			data=pgm_read_byte(( ptr+((msg[chr]-' ')*5)+m));
 		}
-		else  
+		else
 		{
-			data=0x00;
+			data = 0x00;
 		}
 	
 		if((data & (1<<row)))
@@ -139,13 +146,12 @@ ISR(TIMER1_OVF_vect)
 
 		HC595Pulse();
 
-
 		if(++m==7) // the number of columns for a single character
 		{
 			chr++;
 			m=0;
 
-			if(chr >=len)
+			if(chr >=32)
 				{chr=0;}
 		}			
 		
