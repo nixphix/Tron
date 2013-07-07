@@ -6,15 +6,7 @@
 
 #include "font5x7.h"
 
-volatile PGM_P ptr=smallFont;
-
-//volatile uint16_t ii,iii; not used
-
-//Message to display
-volatile char msg[]=" HOME  AWAY ";
-volatile uint8_t len;
-
-
+#define len 12 // max number of char in msg
 #define DISP_ROW_CNT 7
 #define DISP_COL_CNT 80// it takes 7 columns for a character but frst 5 is only data and next 2 is null
 
@@ -27,6 +19,11 @@ volatile uint8_t len;
 
 #define HC595DataHigh() (HC595_PORT|=(1<<HC595_DS_POS))
 #define HC595DataLow() (HC595_PORT&=(~(1<<HC595_DS_POS)))
+
+volatile PGM_P ptr=smallFont;
+
+//Message to display
+volatile char msg[]=" HOME  AWAY ";
 
 void HC595Init(void);
 void HC595Pulse(void);
@@ -100,7 +97,6 @@ int main(void)
 	DDRD=0XF0;
 	sei();
 	HC595Init();
-	len=strlen(msg);
 	//ii=iii=0; not used
 	while(1)
 	{
@@ -116,17 +112,16 @@ ISR(TIMER1_OVF_vect)
 	//PORTD&=(~(1<<PD6)); PC5 is assigned to this
 	TCNT1=0xFFC0;	
 	static uint8_t row;
-	//static uint16_t cnt=1; not used
 	
 	int8_t col;
-
 	int8_t chr = 0;						//iii;
 	int8_t m=0;							//ii;
+	uint8_t data;
+
 
 	for(col=0;col<DISP_COL_CNT;col++)
 	{
-		uint8_t data;
-		
+				
 		if(m<5)
 		{
 			
