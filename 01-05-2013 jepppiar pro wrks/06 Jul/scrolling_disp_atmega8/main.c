@@ -30,7 +30,8 @@ void HC595Pulse(void);
 void HC595Latch(void);
 void SelectRow(uint8_t);
 void BuildMsg(void);
-void BuildString(uint8_t lpad,uint8_t rpad,char msg[],char message[]);
+void BuildStringA(uint8_t lpad,uint8_t rpad,char msg[]);
+void BuildStringB(uint8_t lpad,uint8_t rpad,char msg[]);
 
 
 void HC595Init()
@@ -130,8 +131,10 @@ void BuildMsg()
 	   default:
         lpad=rpad=0;	
 	}
-    BuildString(lpad,rpad,teamA,*messageA);
+    BuildStringA(lpad,rpad,teamA);
 	
+	
+	len = strlen(teamB);
     switch(len)
 	{
 	   case 0:
@@ -166,10 +169,10 @@ void BuildMsg()
 	   default:
         lpad=rpad=0;	
 	}
-    BuildString(lpad,rpad,teamA,*messageB);
+    BuildStringB(lpad,rpad,teamB);
 }
 
-void BuildString(uint8_t lpad,uint8_t rpad,char msg[],char message[])
+void BuildStringA(uint8_t lpad,uint8_t rpad,char msg[])
 {
   uint8_t msglen = strlen(msg)>6?6:strlen(msg);
   for(int i=lpad+rpad+msglen,index = 0;i>0;index++,i--)
@@ -177,17 +180,40 @@ void BuildString(uint8_t lpad,uint8_t rpad,char msg[],char message[])
      if(lpad)
 	 {
 	   lpad--;
-	   message[index] = 0x1F; 
+	   messageA[index] = 0x1F; 
 	 }
 	 else if(msglen)
 	 {
-	   message[index] = strupr(msg[i-(rpad+msglen)]);
+	   messageA[index] = msg[i-(rpad+msglen)];
 	   msglen--;
 	 }
 	 else if(rpad)
 	 {
 	   rpad--;
-	   message[index] = 0x1F; 
+	   messageA[index] = 0x1F; 
+	 }
+  }  
+}
+
+void BuildStringB(uint8_t lpad,uint8_t rpad,char msg[])
+{
+  uint8_t msglen = strlen(msg)>6?6:strlen(msg);
+  for(int i=lpad+rpad+msglen,index = 0;i>0;index++,i--)
+  {
+     if(lpad)
+	 {
+	   lpad--;
+	   messageB[index] = 0x1F; 
+	 }
+	 else if(msglen)
+	 {
+	   messageB[index] = msg[i-(rpad+msglen)];
+	   msglen--;
+	 }
+	 else if(rpad)
+	 {
+	   rpad--;
+	   messageB[index] = 0x1F; 
 	 }
   }  
 }
