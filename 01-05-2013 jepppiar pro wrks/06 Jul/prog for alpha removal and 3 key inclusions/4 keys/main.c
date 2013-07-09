@@ -56,7 +56,8 @@ void t1_rst(void)
 			TCNT1=0xBDB;
 			o_sec=0;
  }
-void main()
+ 
+int main(void)
 {
 
 	USART_Init(103);
@@ -163,7 +164,7 @@ void main()
 	   }
 	  if(menu>=3)
 	   {
-	    menu=0;												// exit out of the menu and capture the team names
+	    menu=0;	// exit out of the menu and capture the team names
 	    _ch=0;
 	   }
 	  USART_Transmit(2);
@@ -231,7 +232,7 @@ uint8_t keypad_4keys(void)
 		
 		}
 		
-		
+	return 0;
 }
 
 
