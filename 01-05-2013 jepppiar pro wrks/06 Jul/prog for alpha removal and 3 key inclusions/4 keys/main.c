@@ -50,7 +50,6 @@ unsigned char USART_Receive( void )
 		return UDR0;
 }
 
-
 void t1_rst(void)
  {
 			TCNT1=0xBDB;
@@ -83,7 +82,7 @@ int main(void)
 	   setcolumn(40);
 	   setpage(4);
 		
-	   for(int k=0;((k<10));k++)
+	   for(int k=0;((k<MAX_CHAR));k++)
 	    {
 		  if(teama[k]!='0')
 		   {
@@ -102,7 +101,7 @@ int main(void)
 	   setcolumn(40);
 	   setpage(4);
      
-	    for(int k=0;((k<10));k++)	//&(teamb[k]!='0')
+	    for(int k=0;((k<MAX_CHAR));k++)	//&(teamb[k]!='0')
 	     {
 	       if(teamb[k]!='0')
 	        {
@@ -191,7 +190,7 @@ void debounce(void)
 }
 
 
-uint8_t check_key_4keys(void)
+uint8_t check_key_4keys(void) // Key press detector
 {
 	
 	PORTA =0b11111110;
@@ -210,25 +209,25 @@ uint8_t check_key_4keys(void)
 }
 
 
-uint8_t keypad_4keys(void)
+uint8_t keypad_4keys(void) // debounce algo
 {
 		PORTA=0x00;
 		PORTB=0xFF;		//set all the input to one
 		
 		_nkey_=check_key_4keys();
 		
-		if(_nkey_ == d_nkey) { USART_Transmit(9); }
+		//if(_nkey_ == d_nkey) { USART_Transmit(9); } // ????
 		
-		if(_nkey_ == 0xFF) { _nkey_ = 98, _okey_ = 99;}  						// this differntiates btw a key gap , sends oxff when a key is nt pressed
+		if(_nkey_ == 0xFF) { _nkey_ = 98, _okey_ = 99;} // this differntiates btw a key gap , sends oxff when a key is nt pressed
 		if(_nkey_ == _okey_) { _nkey_ = 0xFF;}
 		
 		if((_nkey_!= 0xFF)&(_nkey_!=98))
 		{		
 		
-		//USART_Transmit(keymap[_nkey_]);											//  a variable should hold this value									
+		//USART_Transmit(keymap[_nkey_]); //  a variable should hold this value									
 		_okey_=_nkey_;
-		return (_nkey_);
-		d_nkey = _nkey_;
+		return(_nkey_);
+		//d_nkey = _nkey_; // ????
 		
 		}
 		
@@ -242,4 +241,3 @@ ISR(USART0_RX_vect)
    data1=UDR0;
    //USART_Transmit(data1);
 }
-

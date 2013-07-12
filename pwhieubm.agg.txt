@@ -1,0 +1,15 @@
+﻿CUT 10
+
+Optimizing 4 Key codes
+rectifying the known issues - mentioned in the commit before CUT 08
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	modified:   01-05-2013 jepppiar pro wrks/06 Jul/prog for alpha removal and 3 key inclusions/4 keys/main.c
+#	modified:   01-05-2013 jepppiar pro wrks/06 Jul/prog for alpha removal and 3 key inclusions/4 keys/main.h
+#
+
