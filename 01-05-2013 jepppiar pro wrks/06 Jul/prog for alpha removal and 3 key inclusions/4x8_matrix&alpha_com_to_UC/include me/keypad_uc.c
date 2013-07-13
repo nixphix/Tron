@@ -1,5 +1,5 @@
 void _SYSTEM_INIT(void)
-	{	
+{	
 	USART_Init(103);
 	TIMSK=(1<<TOIE1); 														// enabled global and timer overflow interrupt;
 	TCNT1=0xBDB; 															// set initial value to remove time error (16bit counter register)
@@ -8,19 +8,19 @@ void _SYSTEM_INIT(void)
 	DDRA=0x0F;
 	PORTA=0X0F;
 	DDRB=0x00;
-	}
+}
 	
 	
 	
 void debounce(void)
 {
-_delay_ms(10);
+    _delay_ms(10);
 }
 
 	
 uint8_t check_key_32keys(void)
 {
-uint8_t _a_,_b_,_c_,_d_;
+    uint8_t _a_,_b_,_c_,_d_;
 			_a_=check1_32keys();
 			
 			_b_=check2_32keys();
@@ -37,7 +37,7 @@ uint8_t _a_,_b_,_c_,_d_;
 			return _c_;
 			else if(_d_!=0xFF)
 			return _d_;
-			else if(1==1)
+			else 
 			return 0xFF;
 }		
 
@@ -45,24 +45,25 @@ uint8_t _a_,_b_,_c_,_d_;
 uint8_t check1_32keys(void)
 {
 	
-	pad =0b11111110;
+	//pad =0b11111110;
+	PULLUP_ROW(ROW1);
 	debounce();
 	
-	if(bit_is_clear(PINB,c1))
+	if(bit_is_clear(PINB,COLUMN1))
 	return(AS9);
-	else if(bit_is_clear(PINB,c2))
+	else if(bit_is_clear(PINB,COLUMN2))
 	return(ASR);
-	else if(bit_is_clear(PINB,c3))
+	else if(bit_is_clear(PINB,COLUMN3))
 	return(AS1);
-	else if(bit_is_clear(PINB,c4))
+	else if(bit_is_clear(PINB,COLUMN4))
 	return(AS2);
-	else if(bit_is_clear(PINB,c5))
+	else if(bit_is_clear(PINB,COLUMN5))
 	return(AS3);
-	else if(bit_is_clear(PINB,c6))
+	else if(bit_is_clear(PINB,COLUMN6))
 	return(AF1);
-	else if(bit_is_clear(PINB,c7))
+	else if(bit_is_clear(PINB,COLUMN7))
 	return(AFR);
-	else if(bit_is_clear(PINB,c8))
+	else if(bit_is_clear(PINB,COLUMN8))
 	return(AF9);
 	else if(1==1)
 	return 0xFF;
@@ -72,24 +73,25 @@ uint8_t check1_32keys(void)
  
 uint8_t check2_32keys(void)
 {
-	pad=0b11111101;
+	//pad=0b11111101;
+    PULLUP_ROW(ROW2);
 	debounce();
 	
-	if(bit_is_clear(PINB,c1))
+	if(bit_is_clear(PINB,COLUMN1))
 	return(AT9);
-	else if(bit_is_clear(PINB,c2))
+	else if(bit_is_clear(PINB,COLUMN2))
 	return(ATR);
-	else if(bit_is_clear(PINB,c3))
+	else if(bit_is_clear(PINB,COLUMN3))
 	return(AT1);
-	else if(bit_-is_clear(PINB,c4))
+	else if(bit_-is_clear(PINB,COLUMN4))
 	return(QT9);
-	else if(bit_is_clear(PINB,c5))
+	else if(bit_is_clear(PINB,COLUMN5))
 	return(QTR);
-	else if(bit_is_clear(PINB,c6))
+	else if(bit_is_clear(PINB,COLUMN6))
 	return(QT1);
-	else if(bit_is_clear(PINB,c7))
+	else if(bit_is_clear(PINB,COLUMN7))
 	return(R24);
-	else if(bit_is_clear(PINB,c8))
+	else if(bit_is_clear(PINB,COLUMN8))
 	return(R13);
 	else if(1==1)
 	return 0xFF;
@@ -98,25 +100,26 @@ uint8_t check2_32keys(void)
  
 uint8_t check3_32keys(void)
 {
-	pad=0b11111011;
+	//pad=0b11111011;
+	PULLUP_ROW(ROW3);
 	debounce();
 
 	
-	if(bit_is_clear(PINB,c1))
+	if(bit_is_clear(PINB,COLUMN1))
 	return(BS9);
-	else if(bit_is_clear(PINB,c2))
+	else if(bit_is_clear(PINB,COLUMN2))
 	return(BSR);
-	else if(bit_is_clear(PINB,c3))
+	else if(bit_is_clear(PINB,COLUMN3))
 	return(BS1);
-	else if(bit_is_clear(PINB,c4))
+	else if(bit_is_clear(PINB,COLUMN4))
 	return(BS2);
-	else if(bit_is_clear(PINB,c5))
+	else if(bit_is_clear(PINB,COLUMN5))
 	return(BS3);
-	else if(bit_is_clear(PINB,c6))
+	else if(bit_is_clear(PINB,COLUMN6))
 	return(BF1);
-	else if(bit_is_clear(PINB,c7))
+	else if(bit_is_clear(PINB,COLUMN7))
 	return(BFR);
-	else if(bit_is_clear(PINB,c8))
+	else if(bit_is_clear(PINB,COLUMN8))
 	return(BF9);
 	else if(1==1)
 	return 0xFF;
@@ -125,25 +128,26 @@ uint8_t check3_32keys(void)
  
 uint8_t check4_32keys(void)
 {
-	pad =0b11110111;
+	//pad =0b11110111;
+	PULLUP_ROW(ROW4);
 	debounce();
 		
 		
-	if(bit_is_clear(PINB,c1))
+	if(bit_is_clear(PINB,COLUMN1))
 	return(BT9);
-	else if(bit_is_clear(PINB,c2))
+	else if(bit_is_clear(PINB,COLUMN2))
 	return(BTR);
-	else if(bit_is_clear(PINB,c3))
+	else if(bit_is_clear(PINB,COLUMN3))
 	return(BT1);
-	else if(bit_is_clear(PINB,c4))
+	else if(bit_is_clear(PINB,COLUMN4))
 	return(GC9);
-	else if(bit_is_clear(PINB,c5))
+	else if(bit_is_clear(PINB,COLUMN5))
 	return(GCR);
-	else if(bit_is_clear(PINB,c6))
+	else if(bit_is_clear(PINB,COLUMN6))
 	return(GC1);
-	else if(bit_is_clear(PINB,c7))
+	else if(bit_is_clear(PINB,COLUMN7))
 	return(GSP);
-	else if(bit_is_clear(PINB,c8))
+	else if(bit_is_clear(PINB,COLUMN8))
 	return(BPT);
 	else if(1==1)
 	return 0xFF;
@@ -204,6 +208,5 @@ void keypad_32keys(void)
 		if ((_nkey_!= 0xFF)&(_nkey_!=98))
 		{		USART_Transmit(_nkey_);										
 				_okey_=_nkey_;
-		}
-		
+		}		
 }

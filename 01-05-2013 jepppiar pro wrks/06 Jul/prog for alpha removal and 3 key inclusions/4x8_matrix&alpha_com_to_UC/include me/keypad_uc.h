@@ -1,18 +1,18 @@
 //  32keys declaration
-#define pad PORTA
-#define r1 PA0
-#define r2 PA1
-#define r3 PA2
-#define r4 PA3
+#define PULLUP_ROW(X) PORTA = ((PORTA & 0xF0)||(1<<X))
+#define ROW1 PA0
+#define ROW2 PA1
+#define ROW3 PA2
+#define ROW4 PA3
  
-#define c1 PB0
-#define c2 PB1
-#define c3 PB2
-#define c4 PB3
-#define c5 PB4
-#define c6 PB5
-#define c7 PB6
-#define c8 PB7
+#define COLUMN1 PB0
+#define COLUMN2 PB1
+#define COLUMN3 PB2
+#define COLUMN4 PB3
+#define COLUMN5 PB4
+#define COLUMN6 PB5
+#define COLUMN7 PB6
+#define COLUMN8 PB7
 
 uint8_t check1_32keys(void);
 uint8_t check2_32keys(void);  
@@ -23,23 +23,7 @@ void keypad_32keys(void);
 
 uint8_t _okey_,_nkey_;	// for 32key
 
-
-// alpha numeric declarations
-
-
-
-#define c1_alpha PA4
-#define c2_alpha PA5
-#define c3_alpha PA6
-#define c4_alpha PA7
-
-uint8_t check1_alpha(void);
-uint8_t check2_alpha(void);  
-uint8_t check3_alpha(void);
-uint8_t check4_alpha(void);
-uint8_t check_key_alpha(void);
 void t1_rst(void);
-void keypad_alpha(void);
 volatile uint8_t odata=100,b=0;
 
 
