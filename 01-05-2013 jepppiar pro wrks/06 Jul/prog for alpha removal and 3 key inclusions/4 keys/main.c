@@ -52,12 +52,12 @@ unsigned char USART_Receive( void )
 
 
 void t1_rst(void)
-			{
+{
 			TCNT1=0xBDB;
 			o_sec=0;
-			}
-			
-void main()
+}
+	
+int main(void)
 {
 
 	USART_Init(103);
@@ -77,112 +77,117 @@ void main()
 	
 	while(1)
 	{
-	_av=keypad_4keys();
-	
-	// get into this loop only when the home button is pressed, also clear the existing team names since there s no option for backspace
-	
-	
-	
-	if(menu==1)
-	{
-						// for displaying teama name
+		_av=keypad_4keys();
 		
-	lcdputs2(16,3,ar7);		
-	setcolumn(40);
-	setpage(4);
-	
-	for(int k=0;((k<10));k++)
-	{
-	
-	if(teama[k]!='0')
-	{
-	lcdsim_chardata((40+(k*8)),4,teama[k]);
+		// get into this loop only when the home button is pressed, also clear the existing team names since there s no option for backspace		
+		
+		if(menu==1)
+		{
+								// for displaying teama name
+			lcdputs2(16,3,ar7);		
+			setcolumn(40);
+			setpage(4);
+			
+			for(int k=0;((k<10));k++)
+			{
+				if(teama[k]!='0')
+				{
+					lcdsim_chardata((40+(k*8)),4,teama[k]);
+				}
+				else
+				{
+					lcd_bs(6);
+				}
+			}
+		}		
+		else if(menu==2)			// for displaying teamb name
+		{
+			
+			lcdputs2(16,3,ar8);		
+			setcolumn(40);
+			setpage(4);
+         
+			for(int k=0;((k<10));k++)	//&(teamb[k]!='0')
+			{
+				if(teamb[k]!='0')
+				{
+					lcdsim_chardata((40+(k*8)),4,teamb[k]);
+				}
+				else
+				{
+					lcd_bs(6);
+				}
+			}
+		}
+		
+		
+		// now analyze the team names and put them into a PROPER array format.
+		
+		if(_av==0)			// buzzer USART_Transmit(0);
+		{
+			if(_i<6)
+			{
+				_i--;
+				if(_i<0)
+				{
+					_i=0;
+				}
+				teama[_i]='0';
+			}
+		}		
+		else if(_av==1)   // A-Z
+		{
+			if(o_sec==1)
+			{
+				_ch=0;
+			}
+			
+			_ch++;
+			km = keymap[_ch];
+			
+			if(o_sec==0)
+			{
+				if(_i<6)
+				{
+					_i--; 
+					if(_i<0)
+					{
+						_i=0;
+					}
+				}
+			}
+			
+			teama[_i]=(km);
+			_i++;
+			//USART_Transmit(1);
+			
+			t1_rst();
+		}
+		else if(_av==2) // home button
+		{
+			//_ch=0;
+			menu++;
+			if(menu!=0)
+			{
+				clrlcd();
+				_delay_ms(5);
+			}
+			if(menu>=3)
+			{
+				menu=0;												// exit out of the menu and capture the team names
+				_ch=0;
+			}
+			USART_Transmit(2);
+		}
+		else if(_av==3)		// Z-A
+		{
+			USART_Transmit(3);
+		}
+		
 	}
-	else {lcd_bs(6);}
-	}
-	}
-	
-	
-	
-	else if(menu==2)			// for displaying teamb name
-	{
-	
-	lcdputs2(16,3,ar8);		
-	setcolumn(40);
-	setpage(4);
-
-	for(int k=0;((k<10));k++)	//&(teamb[k]!='0')
-	{
-	if(teamb[k]!='0')
-	{lcdsim_chardata((40+(k*8)),4,teamb[k]);}
-	else {lcd_bs(6);}
-	}
-	}
-	
-	
-	// now analyze the team names and put them into a PROPER array format.
-	
-	
-	
-	
-	if(_av==0)			// buzzer USART_Transmit(0);
-	{
-	if(_i<6){_i--;if(_i<0){_i=0;}teama[_i]='0';}
-	}
-	
-	else if(_av==1)   // A-Z
-	{
-	if(o_sec==1)
-	{
-	_ch=0;
-	}
-	
-	_ch++;
-	km = keymap[_ch];
-	
-	if(o_sec==0)
-	{
-	if(_i<6)
-	{_i--; if(_i<0){_i=0;}}
-	}
-	
-	
-	teama[_i]=(km);
-	_i++;
-	
-	
-	//USART_Transmit(1);
-	
-	t1_rst();
-	}
-	
-	else if(_av==2) // home button
-	{
-	//_ch=0;
-	menu++;
-	if(menu!=0)
-	{
-	clrlcd();
-	_delay_ms(5);
-	}
-	if(menu>=3)
-	{menu=0;												// exit out of the menu and capture the team names
-	
-	_ch=0;
-	}
-	
-	USART_Transmit(2);
-	}
-	else if(_av==3)		// Z-A
-	{
-	USART_Transmit(3);
-
-	}
-	
-
-
 }
-}
+
+
 ISR(TIMER1_OVF_vect) 
 {
 	
@@ -240,10 +245,9 @@ uint8_t keypad_4keys(void)
 		//USART_Transmit(keymap[_nkey_]);											//  a variable should hold this value									
 		_okey_=_nkey_;
 		return (_nkey_);
-		d_nkey = _nkey_;
+		//d_nkey = _nkey_;
 				
 		}
-		
 		
 }
 
