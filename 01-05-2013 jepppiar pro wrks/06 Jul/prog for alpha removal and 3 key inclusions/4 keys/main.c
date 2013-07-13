@@ -131,8 +131,16 @@ int main(void)
 				{
 					_i=0;
 				}
-				teama[_i]='0';
-			}
+				//teama[_i]='0';
+				if(menu == 1)
+				{
+				 teama[_i]='0';
+				}
+				if(menu == 2)
+				{
+				 teamb[_i]='0';
+				}
+				}
 		}		
 		else if(_av==1)   // A-Z
 		{
@@ -155,7 +163,7 @@ int main(void)
 			
 			if(o_sec==0)
 			{
-				if(_i<6)
+				if(_i>0)
 				{
 					_i--; 
 					if(_i<0)
