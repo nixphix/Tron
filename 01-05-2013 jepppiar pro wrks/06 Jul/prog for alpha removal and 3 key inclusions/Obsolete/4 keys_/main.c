@@ -9,7 +9,7 @@
 
 #include<sportronix.h>
 
-
+//obs
 void USART_Init( unsigned int);
 void USART_Transmit( unsigned int);
 unsigned char USART_Receive( void );

@@ -83,12 +83,12 @@ int main(void)
 		
 		if(menu==1)
 		{
-								// for displaying teama name
+			// for displaying teama name
 			lcdputs2(16,3,ar7);		
 			setcolumn(40);
 			setpage(4);
-			
-			for(int k=0;((k<10));k++)
+			 
+			for(int k=0;((k<6));k++)
 			{
 				if(teama[k]!='0')
 				{
@@ -102,12 +102,11 @@ int main(void)
 		}		
 		else if(menu==2)			// for displaying teamb name
 		{
-			
 			lcdputs2(16,3,ar8);		
 			setcolumn(40);
 			setpage(4);
          
-			for(int k=0;((k<10));k++)	//&(teamb[k]!='0')
+			for(int k=0;((k<6));k++)	//&(teamb[k]!='0')
 			{
 				if(teamb[k]!='0')
 				{
@@ -125,7 +124,7 @@ int main(void)
 		
 		if(_av==0)			// buzzer USART_Transmit(0);
 		{
-			if(_i<6)
+			if(_i>=0)
 			{
 				_i--;
 				if(_i<0)
@@ -141,8 +140,17 @@ int main(void)
 			{
 				_ch=0;
 			}
-			
 			_ch++;
+			 
+			if(_ch<0)
+			{
+			    _ch=26;
+			}	
+            if(_ch>26)
+			{
+			    _ch=0;
+			}
+			 
 			km = keymap[_ch];
 			
 			if(o_sec==0)
@@ -157,8 +165,19 @@ int main(void)
 				}
 			}
 			
-			teama[_i]=(km);
+            if(menu == 1)
+			{
+			 teama[_i]=(km);
+			}
+			if(menu == 2)
+			{
+			 teamb[_i]=(km);
+			}			
 			_i++;
+			if(_i>=6)
+			{
+			  _i=6;
+			}
 			//USART_Transmit(1);
 			
 			t1_rst();
@@ -177,11 +196,61 @@ int main(void)
 				menu=0;												// exit out of the menu and capture the team names
 				_ch=0;
 			}
-			USART_Transmit(2);
+			//USART_Transmit(2);
 		}
 		else if(_av==3)		// Z-A
 		{
-			USART_Transmit(3);
+			//USART_Transmit(3);
+			if(o_sec==1)
+			{
+				_ch=0;
+			}
+			
+			_ch--;
+			if(_ch<0)
+			{
+			    _ch=26;
+			}
+			 
+			if(_ch<0)
+			{
+			    _ch=26;
+			}	
+            if(_ch>26)
+			{
+			    _ch=0;
+			}
+			km = keymap[_ch];
+			 
+			if(o_sec==0)
+			{
+				if(_i>0)
+				{
+					_i--; 
+					if(_i<0)
+					{
+						_i=0;
+					}
+				}
+			}
+			 
+			if(menu == 1)
+			{
+			 teama[_i]=(km);
+			}
+			if(menu == 2)
+			{
+			 teamb[_i]=(km);
+			}
+			
+			_i++;
+			if(_i>=6)
+			{
+			  _i=6;
+			}
+			//USART_Transmit(1);
+			
+			t1_rst();
 		}
 		
 	}
@@ -248,7 +317,7 @@ uint8_t keypad_4keys(void)
 		//d_nkey = _nkey_;
 				
 		}
-		
+		return 0xFF;
 }
 
 ISR(USART0_RX_vect) 
