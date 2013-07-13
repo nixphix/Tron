@@ -14,7 +14,8 @@ void USART_Init( unsigned int);
 void USART_Transmit( unsigned int);
 unsigned char USART_Receive( void );
 uint8_t keypad_4keys(void);
-int y=0, i=0,_i=0;
+//int y=0, i=0,_i=0;
+static uint8_t indexA=0,indexB=0;
 
 
 void USART_Init( unsigned int baud )
@@ -122,27 +123,48 @@ int main(void)
 		
 		// now analyze the team names and put them into a PROPER array format.
 		
-		if(_av==0)			// buzzer USART_Transmit(0);
+		
+		if(_av==2) // home button
 		{
-			if(_i>=0)
+			//_ch=0;
+			menu++;
+			if(menu!=0)
 			{
-				_i--;
-				if(_i<0)
+				clrlcd();
+				_delay_ms(5);
+			}
+			if(menu>=3)
+			{
+				menu=0;			// exit out of the menu and capture the team names
+				_ch=0;
+			}
+			//USART_Transmit(2);
+		}
+		else if((_av == 0)&(menu == 1)) // buzzer USART_Transmit(0);
+		{
+			if(indexA>=0)
+			{
+				indexA--;
+				if(indexA<0)
 				{
-					_i=0;
+					indexA=0;
 				}
-				//teama[_i]='0';
-				if(menu == 1)
+				teama[indexA]='0';
+			}
+		}	
+		else if((_av == 0)&(menu == 2))	// buzzer USART_Transmit(0);
+		{
+			if(indexB>=0)
+			{
+				indexB--;
+				if(indexB<0)
 				{
-				 teama[_i]='0';
+					indexB=0;
 				}
-				if(menu == 2)
-				{
-				 teamb[_i]='0';
-				}
-				}
-		}		
-		else if(_av==1)   // A-Z
+				teamb[indexB]='0';
+			}
+		}	
+		else if((_av==1) & (menu == 1))   // A-Z
 		{
 			if(o_sec==1)
 			{
@@ -163,50 +185,70 @@ int main(void)
 			
 			if(o_sec==0)
 			{
-				if(_i>0)
+				if(indexA>0)
 				{
-					_i--; 
-					if(_i<0)
+					indexA--; 
+					if(indexA<0)
 					{
-						_i=0;
+						indexA=0;
 					}
 				}
 			}
-			
-            if(menu == 1)
+			 
+			teama[indexA]=(km);
+			 
+			indexA++;
+			if(indexA>=6)
 			{
-			 teama[_i]=(km);
-			}
-			if(menu == 2)
-			{
-			 teamb[_i]=(km);
-			}			
-			_i++;
-			if(_i>=6)
-			{
-			  _i=6;
+			  indexA=6;
 			}
 			//USART_Transmit(1);
 			
 			t1_rst();
 		}
-		else if(_av==2) // home button
+		else if((_av == 1) & (menu == 2))   // A-Z
 		{
-			//_ch=0;
-			menu++;
-			if(menu!=0)
+			if(o_sec==1)
 			{
-				clrlcd();
-				_delay_ms(5);
-			}
-			if(menu>=3)
-			{
-				menu=0;												// exit out of the menu and capture the team names
 				_ch=0;
 			}
-			//USART_Transmit(2);
+			_ch++;
+			 
+			if(_ch<0)
+			{
+			    _ch=26;
+			}	
+            if(_ch>26)
+			{
+			    _ch=0;
+			}
+			 
+			km = keymap[_ch];
+			
+			if(o_sec==0)
+			{
+				if(indexB>0)
+				{
+					indexB--; 
+					if(indexB<0)
+					{
+						indexB=0;
+					}
+				}
+			}
+			 
+			teamb[indexB]=(km);	
+           		
+			indexB++;
+			if(indexB>=6)
+			{
+			  indexB=6;
+			}
+			//USART_Transmit(1);
+			
+			t1_rst();
 		}
-		else if(_av==3)		// Z-A
+		else if((_av == 3) & (menu == 1))		// Z-A
 		{
 			//USART_Transmit(3);
 			if(o_sec==1)
@@ -232,29 +274,69 @@ int main(void)
 			 
 			if(o_sec==0)
 			{
-				if(_i>0)
+				if(indexA>0)
 				{
-					_i--; 
-					if(_i<0)
+					indexA--; 
+					if(indexA<0)
 					{
-						_i=0;
+						indexA=0;
 					}
 				}
 			}
 			 
-			if(menu == 1)
+			teama[indexA]=(km);
+			 
+			indexA++;
+			if(indexA>=6)
 			{
-			 teama[_i]=(km);
+			  indexA=6;
 			}
-			if(menu == 2)
+			//USART_Transmit(1);
+			
+			t1_rst();
+		}
+		else if((_av == 3) & (menu == 2))		// Z-A
+		{
+			//USART_Transmit(3);
+			if(o_sec==1)
 			{
-			 teamb[_i]=(km);
+				_ch=0;
 			}
 			
-			_i++;
-			if(_i>=6)
+			_ch--;
+			if(_ch<0)
 			{
-			  _i=6;
+			    _ch=26;
+			}
+			 
+			if(_ch<0)
+			{
+			    _ch=26;
+			}	
+            if(_ch>26)
+			{
+			    _ch=0;
+			}
+			km = keymap[_ch];
+			 
+			if(o_sec==0)
+			{
+				if(indexB>0)
+				{
+					indexB--; 
+					if(indexB<0)
+					{
+						indexB=0;
+					}
+				}
+			}
+			 
+			teamb[indexB]=(km);
+			 
+			indexB++;
+			if(indexB>=6)
+			{
+			  indexB=6;
 			}
 			//USART_Transmit(1);
 			
