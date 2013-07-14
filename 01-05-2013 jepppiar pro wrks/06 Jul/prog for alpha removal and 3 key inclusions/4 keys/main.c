@@ -83,6 +83,7 @@ int main(void)
 		}
 		else if(menu == 3)
 		{
+		 USART_RxIntEN();
 		 lcdputs2(46,2,ar3);		//score 
 	     lcdputs2(5,6,ar4);
 	     lcdputs2(110,6,ar4);		//FOUL
@@ -114,6 +115,7 @@ int main(void)
 			{
 				menu=1;			// exit out of the menu and capture the team names
 				_ch=0;
+				USART_RxIntDE();
 			}
 			//USART_Transmit(2);
 		}
@@ -147,7 +149,6 @@ int main(void)
 			{
 				_ch=0;
 			}
-			_ch++;
 			 
 			if(_ch<0)
 			{
@@ -159,7 +160,7 @@ int main(void)
 			}
 			 
 			km = keymap[_ch];
-			
+			_ch++;
 			if(o_sec==0)
 			{
 				if(indexA>0)
@@ -189,7 +190,6 @@ int main(void)
 			{
 				_ch=0;
 			}
-			_ch++;
 			 
 			if(_ch<0)
 			{
@@ -201,7 +201,7 @@ int main(void)
 			}
 			 
 			km = keymap[_ch];
-			
+			_ch++;
 			if(o_sec==0)
 			{
 				if(indexB>0)
