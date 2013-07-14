@@ -197,7 +197,7 @@ void keypad_32keys(void)
 		PORTB=0xFF;		//set all the input to one
 		
 		_nkey_=check_key_32keys();
-					
+	    	
 		if (_nkey_ == 0xFF) { _nkey_ = 98, _okey_ = 99;}  						// this differntiates btw a key gap 
 		if(_nkey_ == _okey_) { _nkey_ = 0xFF; }
 		

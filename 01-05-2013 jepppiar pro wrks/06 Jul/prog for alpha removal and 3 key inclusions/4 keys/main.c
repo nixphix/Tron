@@ -30,6 +30,8 @@ int main(void)
 	TCCR1B = (1<<CS12)|(0<<CS11)|(0<<CS10); // start timer/ set clock
 	DDRA=0x0F;
 	PORTA=0X0F;
+	DDRC=0xFF;
+	PORTC=0xFF;
 	DDRB=0x00;
 	DDRD=0xFF;
 	
@@ -342,7 +344,8 @@ _delay_ms(10);
 uint8_t check_key_4keys(void)
 {
 	
-	PORTA =0b11111110;
+	//PORTA =0b11111110;
+	PORTC = 0X00;//&=~(1<<PC7);
 	
 	debounce();
 	if(bit_is_clear(PINB,c1))
@@ -362,7 +365,9 @@ uint8_t check_key_4keys(void)
 
 uint8_t keypad_4keys(void)
 {
-		PORTA=0x00;
+		//PORTA=0x00;
+	    PORTC = 0x00;//&=~(1<<PC7);
+		 
 		PORTB=0xFF;		//set all the input to one
 		
 		_nkey_=check_key_4keys();

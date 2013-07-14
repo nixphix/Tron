@@ -3,12 +3,12 @@
 #include<util/delay.h>
 #include <inttypes.h>
 #include <avr/interrupt.h>
-#include<main.h>
-#include<at128_USART.c>
-#include<GLCD.c>
-#include "global.c"
+#include<T2/main.h>
+#include<T2/at128_USART.c>
+#include<T2/GLCD.c>
+#include <T2/global.c>
 
-#include<sportronix.h>
+#include<T2/sportronix.h>
 
 
 volatile unsigned int rx_char=0,ext=0,i=0,j=0,alpha=0;
