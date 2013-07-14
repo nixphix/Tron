@@ -1,17 +1,15 @@
 #include<avr/io.h>
 #define FCPU 160000000UL
 #include<util/delay.h>
-#include <inttypes.h>
-#include <avr/interrupt.h>
+#include<inttypes.h>
+#include<avr/interrupt.h>
 #include<main.h>
 #include<at128_USART.c>
 #include<GLCD.c>
-#include "global.c"
-
+#include"global.c"
 #include<sportronix.h>
 
-
-volatile unsigned int rx_char=0,ext=0,i=0,j=0,alpha=0;
+volatile unsigned int rx_char=0;//,ext=0,i=0,j=0,alpha=0;
 
 int main(void)
 

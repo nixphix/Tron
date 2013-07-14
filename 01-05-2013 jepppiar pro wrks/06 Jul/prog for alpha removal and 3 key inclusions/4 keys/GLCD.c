@@ -15,7 +15,7 @@ void displayon(void)
 	cport =(0<<rs)|(0<<rw)|(1<<cs1)|(1<<cs2)|(0<<en);
 	_delay_us(45);
 }
-void setcolumn(unsigned char y)
+void setcolumn(uint8_t y)
 {
 	
 	if(y<64)
@@ -40,7 +40,7 @@ void setcolumn(unsigned char y)
 		
 	}
 }
-void setpage(unsigned char x)
+void setpage(uint8_t x)
 {
 	
 	displayoff();
@@ -53,7 +53,7 @@ void setpage(unsigned char x)
 
 
 
-void lcddata(char *value, unsigned int limit)
+void lcddata(uint8_t *value, unsigned int limit)
 {
 	
 	unsigned int i;
@@ -87,7 +87,7 @@ void lcddata(char *value, unsigned int limit)
 }
 void clrlcd(void)
 {
-    unsigned char i,j;
+    uint8_t i,j;
     for (i=0;i < 8;i++)
     {
 	setpage(i);
@@ -98,7 +98,7 @@ void clrlcd(void)
 }
 
 
-void lcdchardata(unsigned char __y,unsigned char __x,unsigned char * _z)
+void lcdchardata(uint8_t __y,uint8_t __x,uint8_t * _z)
 {
 	setcolumn(__y);
 	setpage(__x);
@@ -119,7 +119,7 @@ void lcdchardata(unsigned char __y,unsigned char __x,unsigned char * _z)
 	}
 }
 
-void lcdsim_chardata(unsigned char _y,unsigned char _x,unsigned char _z)
+void lcdsim_chardata(uint8_t _y,uint8_t _x,uint8_t _z)
 {
 	int _h,_i;
 	
@@ -133,9 +133,9 @@ void lcdsim_chardata(unsigned char _y,unsigned char _x,unsigned char _z)
 	
 }
 
-void picture(unsigned char * val)
+void picture(uint8_t * val)
 {
-	unsigned char j;
+	uint8_t j;
 	setcolumn(0);
 	setpage(0);
 	for (j=0;j<8;j++)
@@ -147,7 +147,7 @@ void picture(unsigned char * val)
 }
 
 
-void lcdnumdata(unsigned char __y,unsigned char __x,unsigned char __z)
+void lcdnumdata(uint8_t __y,uint8_t __x,uint8_t __z)
 {
 
 int u,v,w,t;
@@ -178,13 +178,13 @@ if(__z<99)
 }
 }
 
-void lcd_bs(unsigned char ___y)
+void lcd_bs(uint8_t ___y)
 {
 lcddata(&font5x7[0],___y);
 }
-void lcdputs1(unsigned char y,unsigned char x,unsigned char *str)
+void lcdputs1(uint8_t y,uint8_t x,uint8_t *str)
 {
-	unsigned char i;
+	uint8_t i;
 	unsigned int a;
 	setcolumn(y);
 	setpage(x);
@@ -198,9 +198,9 @@ void lcdputs1(unsigned char y,unsigned char x,unsigned char *str)
 	
 }
 
-void lcdputs2(unsigned char y,unsigned char x,unsigned char *str)
+void lcdputs2(uint8_t y,uint8_t x,uint8_t *str)
 {
-	unsigned char i;
+	uint8_t i;
 	unsigned int a;
 	setcolumn(y);
 	setpage(x);
@@ -214,7 +214,7 @@ void lcdputs2(unsigned char y,unsigned char x,unsigned char *str)
 	
 }
 
-void lcdputsdata(unsigned char y,unsigned char x,unsigned char z)
+void lcdputsdata(uint8_t y,uint8_t x,uint8_t z)
 {
 setcolumn(y);
 setpage(x);

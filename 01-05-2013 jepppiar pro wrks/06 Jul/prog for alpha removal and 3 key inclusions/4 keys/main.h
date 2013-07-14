@@ -19,24 +19,24 @@ int _av=0, _ch=0, km=0;
 uint8_t _okey_,_nkey_,d_nkey=5,ext=0,menu=0,d_menu=0,o_sec=0;	// 
 
 
-void lcddata(char *value, unsigned int limit);
-void lcdnumdata(unsigned char,unsigned char,unsigned char); 
-void lcdsim_chardata(unsigned char _y,unsigned char _x,unsigned char _z); 
-void lcdchardata(unsigned char __y,unsigned char __x,unsigned char * _z);
-void lcd_bs(unsigned char ___y);
+void lcddata(uint8_t *value, unsigned int limit);
+void lcdnumdata(uint8_t,uint8_t,uint8_t); 
+void lcdsim_chardata(uint8_t _y,uint8_t _x,uint8_t _z); 
+void lcdchardata(uint8_t __y,uint8_t __x,uint8_t * _z);
+void lcd_bs(uint8_t ___y);
 
 
 
-unsigned char c,z=0;
-unsigned char ar0[]="SCORE MATE";
-unsigned char ar1[]="TEAM A";
-unsigned char ar2[]="TEAM B";                 
-unsigned char ar3[]="SCORE";
-unsigned char ar4[]="F";
-unsigned char ar5[]="T-OUT";
-unsigned char ar6[]="QTR";
-unsigned char ar7[]="Enter TEAM A NAME";
-unsigned char ar8[]="Enter TEAM B NAME";
+uint8_t c,z=0;
+uint8_t ar0[]="SCORE MATE";
+uint8_t ar1[]="TEAM A";
+uint8_t ar2[]="TEAM B";                 
+uint8_t ar3[]="SCORE";
+uint8_t ar4[]="F";
+uint8_t ar5[]="T-OUT";
+uint8_t ar6[]="QTR";
+uint8_t ar7[]="Enter TEAM A NAME";
+uint8_t ar8[]="Enter TEAM B NAME";
 volatile unsigned int teama[10]={'0','0','0','0','0','0','0','0','0','0'};
 volatile unsigned int teamb[10]={'0','0','0','0','0','0','0','0','0','0'};
 volatile unsigned int teamc[2]={'a','b',};

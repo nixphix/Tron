@@ -6,11 +6,21 @@ void USART_Init( unsigned int baud )
 		UBRR0H = (unsigned char)(baud>>8);
 		UBRR0L = (unsigned char)baud;
 		/* Enable receiver and transmitter */
-		UCSR0B = (1<<RXEN0)|(1<<TXEN0)|(1 << RXCIE0 );
+		UCSR0B = (1<<RXEN0)|(1<<TXEN0);
 		/* Set frame format: 8data, 2stop bit */
 		UCSR0C = (1<<USBS0)|(1<<UCSZ01)|(3<<UCSZ00);
 		
 		
+}
+
+void USART_RxIntEN(void)
+{
+        UCSR0B|=(1 << RXCIE0 );
+}
+
+void USART_RxIntDE(void)
+{
+        UCSR0B&=~(1 << RXCIE0 );
 }
 
 void USART_Transmit( unsigned int data )
