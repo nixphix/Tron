@@ -269,7 +269,6 @@ int main(void)
 			  indexA=6;
 			}
 			//USART_Transmit(1);
-			
 			t1_rst();
 		}
 		else if((_av == 3) & (menu == 2))		// Z-A
