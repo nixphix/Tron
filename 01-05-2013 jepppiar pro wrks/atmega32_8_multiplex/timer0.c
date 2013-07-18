@@ -1,12 +1,12 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include<util/delay.h>
-#include "global.c"
-#include "system.c"
-#include "tronicman.h"
+#include "include_me/global.c"
+#include "include_me/system.c"
+#include "include_me/tronicman.h"
 #define F_CPU 16000000UL
 
-volatile int minutes = 15,seconds=0;
+volatile int minutes = 10,seconds=0;
 
 
 

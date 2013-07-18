@@ -2,7 +2,7 @@
 #define AS9  0x05
 #define ASR  0x06
 #define AS1  '7'
-#define AS2  '8'
+#define _AS2  '8'
 #define AS3  '9'
 #define AF9  'A'
 #define AFR  'B'
@@ -35,7 +35,7 @@
 #define AS9  0x05
 #define ASR  0x06
 #define AS1  0x07
-#define AS2  0x08
+#define _AS2  0x08
 #define AS3  0x09
 #define AF9  0x0A
 #define AFR  0x0B
