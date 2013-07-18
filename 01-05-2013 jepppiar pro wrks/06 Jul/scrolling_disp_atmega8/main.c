@@ -1,7 +1,7 @@
 #include <avr/io.h>
-#include <util/delay.h>
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
+#include <util/delay.h>
 #include <string.h>
 
 #include "font5x7.h"
@@ -9,7 +9,7 @@
 #define DISP_ROW_CNT 7
 #define DISP_COL_CNT 80// it takes 7 columns for a character but frst 5 is only data and next 2 is null
 
-#define HC595_PORT 	PORTB	
+#define HC595_PORT 	PORTB
 #define HC595_DDR 	DDRB
 
 #define HC595_DS_POS PB0
