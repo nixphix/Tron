@@ -2,7 +2,7 @@
 #include<util/delay.h>
 #include<avr/interrupt.h>
 #include<inttypes.h>
-#include"global.c"
+#include<Dep/global.c>
 #include<main.h>
 #include<GLCD.c>
 #include<at128_USART.c>
@@ -46,7 +46,22 @@ int main(void)
 		
 		// get into this loop only when the home button is pressed, also clear the existing team names since there s no option for backspace		
 		
-		if(menu == 1)
+		if(menu == 3)
+		{
+		 USART_RxIntEN();
+		 lcdputs2(46,2,ar3);		//score 
+	     lcdputs2(5,6,ar4);
+	     lcdputs2(110,6,ar4);		//FOUL
+	     lcdputs2(58,6,ar6);
+	     
+	     lcdnumdata(25,3,AS);
+	     lcdnumdata(85,3,BS);
+	     lcdnumdata(55,7,QT);
+	     lcdnumdata(5,7,AF);
+	     lcdnumdata(110,7,BF);
+		  menu++;
+		}
+		else if(menu == 1)
 		{
 			// for displaying teama name
 			lcdputs2(16,3,ar7);		
@@ -82,21 +97,6 @@ int main(void)
 					lcd_bs(6);
 				}
 			}
-		}
-		else if(menu == 3)
-		{
-		 USART_RxIntEN();
-		 lcdputs2(46,2,ar3);		//score 
-	     lcdputs2(5,6,ar4);
-	     lcdputs2(110,6,ar4);		//FOUL
-	     lcdputs2(58,6,ar6);
-	     
-	     lcdnumdata(25,3,AS);
-	     lcdnumdata(85,3,BS);
-	     lcdnumdata(55,7,QT);
-	     lcdnumdata(5,7,AF);
-	     lcdnumdata(110,7,BF);
-		 
 		}
 		
 		
@@ -154,9 +154,9 @@ int main(void)
 			 
 			if(_ch<0)
 			{
-			    _ch=26;
+			    _ch=37;
 			}	
-            if(_ch>26)
+            if(_ch>37)
 			{
 			    _ch=0;
 			}
@@ -195,9 +195,9 @@ int main(void)
 			 
 			if(_ch<0)
 			{
-			    _ch=26;
+			    _ch=37;
 			}	
-            if(_ch>26)
+            if(_ch>37)
 			{
 			    _ch=0;
 			}
@@ -238,14 +238,14 @@ int main(void)
 			_ch--;
 			if(_ch<0)
 			{
-			    _ch=26;
+			    _ch=37;
 			}
 			 
 			if(_ch<0)
 			{
-			    _ch=26;
+			    _ch=37;
 			}	
-            if(_ch>26)
+            if(_ch>37)
 			{
 			    _ch=0;
 			}
@@ -284,14 +284,14 @@ int main(void)
 			_ch--;
 			if(_ch<0)
 			{
-			    _ch=26;
+			    _ch=37;
 			}
 			 
 			if(_ch<0)
 			{
-			    _ch=26;
+			    _ch=37;
 			}	
-            if(_ch>26)
+            if(_ch>37)
 			{
 			    _ch=0;
 			}
@@ -367,7 +367,7 @@ uint8_t keypad_4keys(void)
 {
 		//PORTA=0x00;
 	    PORTC = 0x00;//&=~(1<<PC7);
-		 
+		
 		PORTB=0xFF;		//set all the input to one
 		
 		_nkey_=check_key_4keys();
@@ -375,18 +375,16 @@ uint8_t keypad_4keys(void)
 		
 		
 		if(_nkey_ == d_nkey) { USART_Transmit(9); }
-			
-		if (_nkey_ == 0xFF) { _nkey_ = 98, _okey_ = 99;}  						// this differntiates btw a key gap , sends oxff when a key is nt pressed
+		
+		if (_nkey_ == 0xFF) { _nkey_ = 98, _okey_ = 99;} // this differntiates btw a key gap , sends oxff when a key is nt pressed
 		if(_nkey_ == _okey_) { _nkey_ = 0xFF;}
 		
 		if ((_nkey_!= 0xFF)&(_nkey_!=98))
 		{		
-		
-		//USART_Transmit(keymap[_nkey_]);											//  a variable should hold this value									
+		//USART_Transmit(keymap[_nkey_]); //  a variable should hold this value									
 		_okey_=_nkey_;
 		return (_nkey_);
 		//d_nkey = _nkey_;
-				
 		}
 		return 0xFF;
 }
@@ -400,7 +398,7 @@ rx_char=UDR0;
 PORTD^=0xff;
 	 switch(rx_char)
 	  {
-	     
+	    
 	     case AS9:
 		  AS--;	
 			if(AS<0)
