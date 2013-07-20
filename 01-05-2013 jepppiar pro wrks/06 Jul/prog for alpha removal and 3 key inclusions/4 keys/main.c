@@ -7,6 +7,7 @@
 #include<GLCD.c>
 #include<at128_USART.c>
 #include<sportronix.h>
+#include<string.h>
 
 #define F_CPU 16000000UL
 
@@ -14,6 +15,7 @@ uint8_t keypad_4keys(void);
 
 static uint8_t indexA=0,indexB=0;
 volatile unsigned int rx_char=0;
+void sendNB(void);
 
 void t1_rst(void)
 {
@@ -438,8 +440,6 @@ rx_char=UDR0;
 		  if(AF<0)
 		  {AF=0;}
 		  USART_Tx128(AF_AD,AF); 
-		 
-		  
 		 break;
 		 
 	     case AFR:
@@ -498,7 +498,7 @@ rx_char=UDR0;
 		  BS+=2;
 		 
 		  USART_Tx128(BS_AD,BS);
-		
+		 
 		 break;
 		 
 	     case BS3:
@@ -614,3 +614,23 @@ rx_char=UDR0;
 	 lcdnumdata(5,7,AF);
 	 lcdnumdata(110,7,BF);
  }
+
+void sendNB(void)
+{
+   if(menu == 2)
+   {
+     for(uint8_t i=0;i<strlen(teama);i++)
+	 {
+       USART_Tx128(i+100,teama[i]);
+	 }  
+   }
+   else if(menu == 2)
+   {
+     for(uint8_t i=0;i<strlen(teamb);i++)
+	 {
+       USART_Tx128(i+150,teamb[i]);
+	 }  
+   }
+
+
+}
