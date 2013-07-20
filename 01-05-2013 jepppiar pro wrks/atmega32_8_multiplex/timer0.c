@@ -135,8 +135,8 @@ int main(void)
 			buzzer=0;
 			}
 			
-	/*	 ASH=1, ARO=1,buzzer=0,BSH=1;
-	
+	 /*	 ASH=1, ARO=1,buzzer=0,BSH=1;
+	 
 		scoAdigit(ASH,ARO,buzzer);
 		
 		PORTC = 0b01000000;
@@ -145,7 +145,7 @@ int main(void)
 		_delay_us(100);
 		ARO=0;
 		
-	
+	 
 		scoBdigit(BSH,ARO);
 		
 		PORTC = 0b00100000;
@@ -161,9 +161,9 @@ int main(void)
 		 _delay_ms(1500);
 		PORTC = 0b00000000;
 		_delay_us(1500);
-	
+	 
 		
-	ARO=0;
+	 ARO=0;
 		scoBdigit(BSH,0);
 		
 		PORTC = 0b00100000;
@@ -171,8 +171,8 @@ int main(void)
 		PORTC = 0b00000000;
 		_delay_us(1500);	
 		
-	*/
-				
+	 */
+	 
 	}
 	return 0;
  }
@@ -183,11 +183,11 @@ ISR(TIMER1_OVF_vect)
   TCNT1=0xBDC; // set initial value to remove time error (16bit counter register)
   if(GCSP==0)
   {
-  seconds--;
+    seconds--;
   }
   else 
   {
-  buz++;
+    buz++;
   }
 }
 
@@ -226,62 +226,57 @@ ISR(USART_RXC_vect) // @ brd side
 				  case 200:// #
 					  //display(5);
 				       AS=RXC_ISR_DATA[2];
-					   if(AS>99){ASH=1;}
-					   else{ASH=0;}
+					  // if(AS>99){ASH=1;}
+					  // else{ASH=0;}
 					   if(AS>99)
-						 {
-						  //ASH=1;// 1
+						{
+						  ASH=1;// 1
 						  AS-=100;//00
-						 }
-						 
-						 if(AS<0)
+						}
+					   else if(AS<0)
+						{
+							if(ASH==1)
 							{
-								if(ASH==1)
-									{
-									 //ASH=0;
-									 AS+=100;//99
-									}
-								else
-									{
-									 AS=0;
-									}
+							  ASH=0;
+							  AS+=100;//99
 							}
-		 
-						 
+							else
+							{
+							  AS=0;
+							}
+						}
 				  break;
-				  
+				    
 				  case 201: //$
 					   AF=RXC_ISR_DATA[2];
 				  break;
-				  
+				   
 				  case 202: //%
 					   AT=RXC_ISR_DATA[2];
 				  break;
-				  
+				    
 				  case 210: //&
 					   BS=RXC_ISR_DATA[2];
-					   if(BS>99){BSH=1;}
-					   else{BSH=0;}
+					 //  if(BS>99){BSH=1;}
+					  // else{BSH=0;}
 					   	 if(BS>99)
 						 {
-						  // BSH=1;// 1
-						   BS=(BS-100);//00
+						   BSH=1;// 1
+						   BS-=100;//00
 						 }
-						 
-						 if (BS<0)
-							 {
-							   if(BSH==1)
-								{
-								 //BSH=0;
-								 BS+=100;//99
-								}
-								else
-								{
-								 BS=0;
-								}
-								
-							 }
-						 
+						 else if (BS<0)
+						 {
+						   if(BSH==1)
+							{
+							 BSH=0;
+							 BS+=100;//99
+							}
+							else
+							{
+							 BS=0;
+							}
+							
+						 }
 				  break;
 				  
 				  case 211: //'
