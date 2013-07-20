@@ -4,7 +4,8 @@
 #include <util/delay.h>
 #include <string.h>
 
-#include "font5x7.h"
+#include "dep/font5x7.h"
+#include "dep/functions.c"
 
 #define DISP_ROW_CNT 7
 #define DISP_COL_CNT 80// it takes 7 columns for a character but frst 5 is only data and next 2 is null
@@ -24,6 +25,8 @@ volatile uint8_t len;  // max number of char in message
 
 //Message to display
 volatile char message[80],messageA[40],messageB[40] ;//={0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,'H','O','M','E',0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,'A','W','A','Y',0x1F,0x1F,0x1F,0x1F,0x1F,};
+volatile char teamA[], teamB[];
+
 
 void HC595Init(void);
 void HC595Pulse(void);
@@ -93,7 +96,6 @@ void SelectRow(uint8_t r)
 	
 void BuildMsg()
 {
-  char teamA[]="Home", teamB[]="AWAY";
   uint8_t len = strlen(teamA),lpad=0,rpad=0;
 
     switch(len)
@@ -231,11 +233,10 @@ int main(void)
 	DDRD=0XF0;
 	
 	BuildMsg();
-	
+	len = strlen(message);
 	sei();
 	HC595Init();
 	//ii=iii=0; not used
-	len = strlen(message);
 	while(1)
 	{
 	}
@@ -301,4 +302,46 @@ ISR(TIMER1_OVF_vect)
 		
 		row=0;
 	}
+}
+
+ISR(USART_RXC_vect) 
+{
+     RXC_ISR_DATA[RXC_ISR_INDEX]=UDR;
+   RXC_ISR_INDEX++;
+ 
+   switch(RXC_ISR_INDEX)
+   {
+	  case 1:
+	  
+	       CHK_SUM=(0x0F&RXC_ISR_DATA[1]);
+		break;	
+      case 2:
+       		
+   	       CHK_SUM^=RXC_ISR_DATA[2];
+        break;
+	  case 3:
+	       if(RXC_ISR_DATA[3]==CHK_SUM)
+		    {
+			  switch(RXC_ISR_DATA[1])
+			   {  
+				  case 100://NBA
+				  case 101:
+				  case 102:
+				  case 103:
+				  case 104:
+				  case 105:
+				  
+				  case 150://NBB
+				  case 151:
+				  case 152:
+				  case 153:
+				  case 154:
+				  case 155:
+				    break;
+			   }
+			}
+	  default:	
+	       
+		   RXC_ISR_INDEX=0;	
+   }     
 }

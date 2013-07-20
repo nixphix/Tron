@@ -257,11 +257,11 @@ ISR(USART_RXC_vect) // @ brd side
 				    
 				  case 210: //&
 					   BS=RXC_ISR_DATA[2];
-					 //  if(BS>99){BSH=1;}
-					  // else{BSH=0;}
+					  //  if(BS>99){BSH=1;}
+					  //  else{BSH=0;}
 					   	 if(BS>99)
 						 {
-						   BSH=1;// 1
+						   BSH=1;  // 1
 						   BS-=100;//00
 						 }
 						 else if (BS<0)
@@ -304,8 +304,20 @@ ISR(USART_RXC_vect) // @ brd side
 					   GCSP=1;
 				  break;
 				  
-				  case 100:
-				  
+				  case 100://NBA
+				  case 101:
+				  case 102:
+				  case 103:
+				  case 104:
+				  case 105:
+				  case 150://NBB
+				  case 151:
+				  case 152:
+				  case 153:
+				  case 154:
+				  case 155:
+				    NB_Tx(RXC_ISR_DATA[1],RXC_ISR_DATA[2]); // 3 byte packet
+				    break;
 			   }
 			}
 	  default:	

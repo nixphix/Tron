@@ -75,6 +75,7 @@ static inline uint8_t match(uint8_t __keypress) __attribute__((always_inline));
 // packet data
 static inline void USART_Intr(void) __attribute__((always_inline));
 static inline void USART_Tx(uint8_t __Addr,uint8_t __data) __attribute__((always_inline));
+static inline void NB_Tx(uint8_t __Addr,uint8_t __data) __attribute__((always_inline)); // for Tx from At32 to At8
 //static inline uint8_t USART_Rx(void) __attribute__((always_inline));
 #endif
 void
@@ -136,8 +137,20 @@ USART_Receive(void)
  void 
  USART_Tx(uint8_t __Addr,uint8_t __data)
  {
-   uint8_t __i,__Pkt[4]={0x53,__Addr,__data,0x45} ;
+   uint8_t __i,__CHK_SUM=((0X0F&__Addr)^(__data)),__Pkt[4]={START_BYTE,__Addr,__data,__CHK_SUM} ;
    for(__i=0;__i<4;__i++)
+    {   
+	  while ( !( UCSRA & (1<<UDRE)) );
+		/* Put data into buffer, sends the data */
+		UDR = __Pkt[__i];
+	}
+ }
+ 
+ void 
+ NB_Tx(uint8_t __Addr,uint8_t __data)
+ {
+   uint8_t __i,__CHK_SUM=((0X0F&__Addr)^(__data)),__Pkt[3]={__Addr,__data,__CHK_SUM} ;
+   for(__i=0;__i<3;__i++)
     {   
 	  while ( !( UCSRA & (1<<UDRE)) );
 		/* Put data into buffer, sends the data */
@@ -147,7 +160,7 @@ USART_Receive(void)
  
 uint8_t 
 GetKeyPressed(void)
- {
+{
 	int __r,__c;
 
 	KEYPAD_PORT|= 0X0F;

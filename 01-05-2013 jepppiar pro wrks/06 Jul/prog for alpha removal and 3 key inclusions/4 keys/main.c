@@ -110,6 +110,7 @@ int main(void)
 		{
 			//_ch=0;
 			menu++;
+			sendNB(); // Send the data to main board
 			if(menu!=0)
 			{
 				clrlcd();
@@ -624,7 +625,7 @@ void sendNB(void)
        USART_Tx128(i+100,teama[i]);
 	 }  
    }
-   else if(menu == 2)
+   else if(menu == 3)
    {
      for(uint8_t i=0;i<strlen(teamb);i++)
 	 {

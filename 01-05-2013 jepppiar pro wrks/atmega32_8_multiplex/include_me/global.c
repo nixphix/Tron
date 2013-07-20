@@ -69,7 +69,7 @@
 //Atmega32 Mainboard
 uint8_t data=0, odata=100, e=0, nkey = 8 , okey = 9;
 const uint8_t keymap[9][3] = {{'A','B','C',},{'D','E','F',},{'G','H','I',},{'J','K','L',},{'M','N','O',},{'P','Q','R',},{'S','T','U',},{'V','W','X',},{'Y','Z','.',}};
-volatile uint8_t RXC_ISR_DATA[2], RXC_ISR_INDEX=0, END_BYTE=0x45, CHK_SUM=0;
+volatile uint8_t RXC_ISR_DATA[4], RXC_ISR_INDEX=0, END_BYTE=0x45, CHK_SUM=0;
 volatile uint8_t VB_DATA=0;
 
 
