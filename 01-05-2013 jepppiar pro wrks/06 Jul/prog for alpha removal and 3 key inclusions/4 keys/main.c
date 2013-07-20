@@ -2,7 +2,7 @@
 #include<util/delay.h>
 #include<avr/interrupt.h>
 #include<inttypes.h>
-#include<Dep/global.c>
+#include<Dep/global.c> //bug free code
 #include<main.h>
 #include<GLCD.c>
 #include<at128_USART.c>
@@ -395,7 +395,7 @@ ISR(USART0_RX_vect)  // @ CTrL side
 rx_char=UDR0;
 
 
-PORTD^=0xff;
+//PORTD^=0xff; For LEDs in protoboard (red)
 	 switch(rx_char)
 	  {
 	    
@@ -416,7 +416,6 @@ PORTD^=0xff;
 	  	 case AS1:
 		  AS++;
 		  USART_Tx128(AS_AD,AS);
-	     
 		  
 		 break;
 		 

@@ -275,7 +275,6 @@ ISR(USART_RXC_vect) // @ brd side
 							{
 							 BS=0;
 							}
-							
 						 }
 				  break;
 				  
@@ -305,6 +304,7 @@ ISR(USART_RXC_vect) // @ brd side
 					   GCSP=1;
 				  break;
 				  
+				  case 100:
 				  
 			   }
 			}

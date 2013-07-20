@@ -66,7 +66,7 @@
 #define BPT  0x24
 
 
-
+//Atmega32 Mainboard
 uint8_t data=0, odata=100, e=0, nkey = 8 , okey = 9;
 const uint8_t keymap[9][3] = {{'A','B','C',},{'D','E','F',},{'G','H','I',},{'J','K','L',},{'M','N','O',},{'P','Q','R',},{'S','T','U',},{'V','W','X',},{'Y','Z','.',}};
 volatile uint8_t RXC_ISR_DATA[2], RXC_ISR_INDEX=0, END_BYTE=0x45, CHK_SUM=0;
@@ -78,5 +78,8 @@ volatile uint8_t VB_DATA=0;
 volatile int ASH=0,BSH=0,AS=0,AF=0,AT=0,BS=0,BF=0,BT=0,QT=0,ARO=0,GCSP=0,GC=2,gcm=9,gcrst=0,gcp=1;
 
 volatile uint8_t AS_AD=200,AF_AD=201,AT_AD=202,BS_AD=210,BF_AD=211,BT_AD=212,QT_AD=220,ARO_AD=221,GCSP_AD=222,GC_AD=223;
+
+// LED Matrix 
+volatile uint8_t NBA0_AD=100,NBA1_AD=101,NBA2_AD=102,NBA3_AD=103,NBA4_AD=104,NBA5_AD=105,NBB0_AD=150,NBB1_AD=151,NBB2_AD=152,NBB3_AD=153,NBB4_AD=154,NBB5_AD=155;
 
 volatile uint8_t  FO_MAX=5, TO_MAX=5, QT_MAX=5, buzzer=0, buz=0;
