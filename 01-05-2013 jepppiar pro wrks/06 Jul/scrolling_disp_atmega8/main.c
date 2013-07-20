@@ -25,7 +25,7 @@ volatile uint8_t len;  // max number of char in message
 
 //Message to display
 volatile char message[80],messageA[40],messageB[40] ;//={0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,'H','O','M','E',0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,'A','W','A','Y',0x1F,0x1F,0x1F,0x1F,0x1F,};
-volatile char teamA[], teamB[];
+volatile char teamA[6], teamB[6], REFRESH_FLAG = 0 ;//updated by USART RXC ISR
 
 
 void HC595Init(void);
@@ -58,7 +58,6 @@ void HC595Latch()
 	HC595_PORT&=(~(1<<HC595_ST_CP_POS));
 	_delay_loop_1(1);
 }
-
 
 
 void SelectRow(uint8_t r)
@@ -239,6 +238,12 @@ int main(void)
 	//ii=iii=0; not used
 	while(1)
 	{
+	  if(REFRESH_FLAG==1)
+	  {
+	    BuildMsg();
+	    len = strlen(message);
+	    REFRESH_FLAG = 0;
+	  }
 	}
 	return 0;
 }
@@ -304,7 +309,7 @@ ISR(TIMER1_OVF_vect)
 	}
 }
 
-ISR(USART_RXC_vect) 
+ISR(USART_RXC_vect) // 0 - Addr, 1 - Data, 2 - CHKSUM
 {
      RXC_ISR_DATA[RXC_ISR_INDEX]=UDR;
    RXC_ISR_INDEX++;
@@ -313,16 +318,16 @@ ISR(USART_RXC_vect)
    {
 	  case 1:
 	  
-	       CHK_SUM=(0x0F&RXC_ISR_DATA[1]);
+	       CHK_SUM=(0x0F&RXC_ISR_DATA[0]);
 		break;	
       case 2:
        		
-   	       CHK_SUM^=RXC_ISR_DATA[2];
+   	       CHK_SUM^=RXC_ISR_DATA[1];
         break;
 	  case 3:
-	       if(RXC_ISR_DATA[3]==CHK_SUM)
+	       if(RXC_ISR_DATA[2]==CHK_SUM)
 		    {
-			  switch(RXC_ISR_DATA[1])
+			  switch(RXC_ISR_DATA[0])
 			   {  
 				  case 100://NBA
 				  case 101:
@@ -330,18 +335,22 @@ ISR(USART_RXC_vect)
 				  case 103:
 				  case 104:
 				  case 105:
-				  
+				     teamA[RXC_ISR_DATA[0]-100]=RXC_ISR_DATA[1];
+					 REFRESH_FLAG=1;
+					 break;
+					 
 				  case 150://NBB
 				  case 151:
 				  case 152:
 				  case 153:
 				  case 154:
 				  case 155:
-				    break;
+				     teamB[RXC_ISR_DATA[0]-150]=RXC_ISR_DATA[1];
+					 REFRESH_FLAG=1;
+					 break;			   
 			   }
 			}
 	  default:	
-	       
 		   RXC_ISR_INDEX=0;	
    }     
 }
