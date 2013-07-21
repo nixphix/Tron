@@ -620,14 +620,14 @@ void sendNB(void)
 {
    if(menu == 2)
    {
-     for(uint8_t i=0;i<strlen(teama);i++)
+     for(uint8_t i=0;i<6;i++)
 	 {
        USART_Tx128(i+100,teama[i]);
 	 }  
    }
    else if(menu == 3)
    {
-     for(uint8_t i=0;i<strlen(teamb);i++)
+     for(uint8_t i=0;i<6;i++)
 	 {
        USART_Tx128(i+150,teamb[i]);
 	 }  
