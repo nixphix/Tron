@@ -51,7 +51,7 @@ void HC595Pulse()
 	HC595_PORT&=(~(1<<HC595_SH_CP_POS));
 }
 
-void HC595Latch()
+void HC595Latch()	
 {
 	HC595_PORT|=(1<<HC595_ST_CP_POS);
 	_delay_loop_1(1);
@@ -139,7 +139,7 @@ void BuildMsg()
 	{
 	   case 0:
 	    lpad=6;rpad=7;
-	    strcpy(teamA,"AWAY");
+	    strcpy(teamB,"AWAY");
 	    break;
 		
 	   case 1:
@@ -232,10 +232,15 @@ int main(void)
 	DDRD=0XF0;
 	
 	BuildMsg();
+	
+	USART_Init(103);
+	USART_Intr();
 	len = strlen(message);
-	sei();
 	HC595Init();
+
+	sei();
 	//ii=iii=0; not used
+	
 	while(1)
 	{
 	  if(REFRESH_FLAG==1)
