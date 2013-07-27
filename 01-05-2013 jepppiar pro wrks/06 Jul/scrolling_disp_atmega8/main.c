@@ -24,7 +24,7 @@ volatile PGM_P ptr=smallFont;
 volatile uint8_t len;  // max number of char in message
 
 //Message to display
-volatile char message[80],messageA[40],messageB[40] ;//={0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,'H','O','M','E',0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,'A','W','A','Y',0x1F,0x1F,0x1F,0x1F,0x1F,};
+volatile char message[11] = {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},messageA[40],messageB[40] ;//={0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,'H','O','M','E',0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,'A','W','A','Y',0x1F,0x1F,0x1F,0x1F,0x1F,};
 volatile char teamA[6], teamB[6], REFRESH_FLAG = 0 ;//updated by USART RXC ISR
 
 
@@ -237,11 +237,11 @@ int main(void)
 	DDRC=0xFF;
 	DDRD=0XF0;
 	
-	BuildMsg();
+	//BuildMsg();
 	
 	USART_Init(103);
 	USART_Intr();
-	len = strlen(message);
+	//len = strlen(message);
 	HC595Init();
 
 	sei();
@@ -249,12 +249,18 @@ int main(void)
 	
 	while(1)
 	{
-	  if(REFRESH_FLAG==1)
+	  /*if(REFRESH_FLAG==1)
 	  {
 	    BuildMsg();
 	    len = strlen(message);
 	    REFRESH_FLAG = 0;
-	  }
+	  }*/
+	strcpy(message,strupr(teamA));
+	
+	strcat(message,strupr(teamB));
+	
+	_delay_ms(1500);
+	
 	}
 	return 0;
 }
@@ -334,7 +340,7 @@ ISR(USART_RXC_vect) // 0 - Addr, 1 - Data, 2 - CHKSUM
       case 2:
        		
    	       CHK_SUM^=RXC_ISR_DATA[1];
-		   USART_Transmit(RXC_ISR_DATA[0]); 
+		  // USART_Transmit(RXC_ISR_DATA[0]); 
 			USART_Transmit(RXC_ISR_DATA[1])   ;
         break;
 	  case 3:
