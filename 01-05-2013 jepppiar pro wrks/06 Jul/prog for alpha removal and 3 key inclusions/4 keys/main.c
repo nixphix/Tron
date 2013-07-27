@@ -72,7 +72,7 @@ int main(void)
 			 
 			for(int k=0;((k<6));k++)
 			{
-				if(teama[k]!='0')
+				if(teama[k]!=0x01)
 				{
 					lcdsim_chardata((40+(k*8)),4,teama[k]);
 				}
@@ -88,9 +88,9 @@ int main(void)
 			setcolumn(40);
 			setpage(4);
          
-			for(int k=0;((k<6));k++)	//&(teamb[k]!='0')
+			for(int k=0;((k<6));k++)	//&(teamb[k]!=0x01)
 			{
-				if(teamb[k]!='0')
+				if(teamb[k]!=0x01)
 				{
 					lcdsim_chardata((40+(k*8)),4,teamb[k]);
 				}
@@ -133,7 +133,7 @@ int main(void)
 				{
 					indexA=0;
 				}
-				teama[indexA]='0';
+				teama[indexA]=0x01;
 			}
 		}	
 		else if((_av == 0)&(menu == 2))	// buzzer USART_Transmit(0);
@@ -145,7 +145,7 @@ int main(void)
 				{
 					indexB=0;
 				}
-				teamb[indexB]='0';
+				teamb[indexB]=0x01;
 			}
 		}	
 		else if((_av==1) & (menu == 1))   // A-Z
@@ -617,17 +617,18 @@ rx_char=UDR0;
  }
 
 void sendNB(void)
-{
+{  
+   uint8_t i=0;
    if(menu == 2)
    {
-     for(uint8_t i=0;i<6;i++)
+     while(teama[i++]!=0x01) 
 	 {
        USART_Tx128(i+100,teama[i]);
 	 }  
    }
    else if(menu == 3)
    {
-     for(uint8_t i=0;i<6;i++)
+     while(teamb[i++]!=0x01) 
 	 {
        USART_Tx128(i+150,teamb[i]);
 	 }  

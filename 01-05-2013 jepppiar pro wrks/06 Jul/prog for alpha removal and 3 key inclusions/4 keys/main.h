@@ -37,8 +37,8 @@ uint8_t ar5[]="T-OUT";
 uint8_t ar6[]="QTR";
 uint8_t ar7[]="Enter TEAM A NAME";
 uint8_t ar8[]="Enter TEAM B NAME";
-volatile uint8_t teama[10]={'0','0','0','0','0','0','0','0','0','0'};
-volatile uint8_t teamb[10]={'0','0','0','0','0','0','0','0','0','0'};
+volatile uint8_t teama[10]={0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01};
+volatile uint8_t teamb[10]={0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01};
 volatile uint8_t teamc[2]={'a','b',};
 
 /*	    lcdputs2(33,0,ar0);

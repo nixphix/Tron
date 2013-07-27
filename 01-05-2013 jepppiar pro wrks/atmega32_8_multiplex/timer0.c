@@ -196,7 +196,8 @@ ISR(USART_RXC_vect) // @ brd side
 
    RXC_ISR_DATA[RXC_ISR_INDEX]=UDR;
    RXC_ISR_INDEX++;
- 
+   PORTD ^= 0xff;
+   _delay_ms(100);
    switch(RXC_ISR_INDEX)
    {
       case 1:
