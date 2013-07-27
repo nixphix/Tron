@@ -93,7 +93,7 @@ void SelectRow(uint8_t r)
 	}
 }
 	
-void BuildMsg()
+/*void BuildMsg()
 {
   uint8_t len = strlen(teamA),lpad=0,rpad=0;
 
@@ -101,7 +101,7 @@ void BuildMsg()
 	{
 	   case 0:
 	    lpad=7;rpad=6;
-	    strcpy(teamA,"HOME");
+	  //  strcpy(teamA,"HOME");
 	    break;
 		
 	   case 1:
@@ -139,7 +139,7 @@ void BuildMsg()
 	{
 	   case 0:
 	    lpad=6;rpad=7;
-	    strcpy(teamB,"AWAY");
+	  //  strcpy(teamB,"AWAY");
 	    break;
 		
 	   case 1:
@@ -198,7 +198,7 @@ void BuildStringA(uint8_t lpad,uint8_t rpad,char msg[])
 	   messageA[index] = 0x1F; 
 	 }
   }  
-  messageA[++index] = '\0'; // To mark end of String 
+//  messageA[++index] = '\0'; // To mark end of String 
  
 }
 
@@ -224,9 +224,9 @@ void BuildStringB(uint8_t lpad,uint8_t rpad,char msg[])
 	   messageB[index] = 0x1F; 
 	 }
   } 
-  messageB[++index] = '\0'; // To mark end of String 
+//  messageB[++index] = '\0'; // To mark end of String 
   
-}
+}*/
 	
 int main(void)
 {
@@ -334,6 +334,8 @@ ISR(USART_RXC_vect) // 0 - Addr, 1 - Data, 2 - CHKSUM
       case 2:
        		
    	       CHK_SUM^=RXC_ISR_DATA[1];
+		   USART_Transmit(RXC_ISR_DATA[0]); 
+			USART_Transmit(RXC_ISR_DATA[1])   ;
         break;
 	  case 3:
 	       if(RXC_ISR_DATA[2]==CHK_SUM)
@@ -363,5 +365,6 @@ ISR(USART_RXC_vect) // 0 - Addr, 1 - Data, 2 - CHKSUM
 			}
 	  default:	
 		   RXC_ISR_INDEX=0;	
-   }     
+   }  
+   
 }

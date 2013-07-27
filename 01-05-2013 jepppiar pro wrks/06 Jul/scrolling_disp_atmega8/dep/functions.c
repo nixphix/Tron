@@ -6,6 +6,7 @@ volatile uint8_t RXC_ISR_DATA[4], RXC_ISR_INDEX=0, END_BYTE=0x45, CHK_SUM=0;
 static inline void USART_Init(unsigned int __baud) __attribute__((always_inline));
 static inline void USART_Intr(void) __attribute__((always_inline));
 static inline void NB_Tx(uint8_t __Addr,uint8_t __data) __attribute__((always_inline)); // for Tx from At32 to At8
+void USART_Transmit( uint8_t __data );
 
 
 void 
@@ -36,4 +37,15 @@ NB_Tx(uint8_t __Addr,uint8_t __data)
 		/* Put data into buffer, sends the data */
 		UDR = __Pkt[__i];
 	}
+}
+
+
+void 
+USART_Transmit( uint8_t __data )
+{
+		/* Wait for empty transmit buffer */
+		while ( !( UCSRA & (1<<UDRE)) );
+		
+		/* Put data into buffer, sends the data */
+		UDR = __data;
 }
