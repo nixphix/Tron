@@ -621,16 +621,16 @@ void sendNB(void)
    uint8_t i=0;
    if(menu == 2)
    {
-     while(teama[i++]!=0x01) 
+     while(teama[i]!=0x01) 
 	 {
-       USART_Tx128(i+100,teama[i]);
+       USART_Tx128(i+100,teama[i++]);
 	 }  
    }
    else if(menu == 3)
    {
-     while(teamb[i++]!=0x01) 
+     while(teamb[i]!=0x01) 
 	 {
-       USART_Tx128(i+150,teamb[i]);
+       USART_Tx128(i+150,teamb[i++]);
 	 }  
    }
 
