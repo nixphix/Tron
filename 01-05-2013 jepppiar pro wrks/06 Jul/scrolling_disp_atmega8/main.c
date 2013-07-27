@@ -179,7 +179,8 @@ void BuildMsg()
 void BuildStringA(uint8_t lpad,uint8_t rpad,char msg[])
 {
   uint8_t msglen = strlen(msg)>6?6:strlen(msg);
-  for(int i=lpad+rpad+msglen,index = 0,j=0;i>0;index++,i--)
+  int8_t index = 0;
+  for(int8_t i=lpad+rpad+msglen,j=0;i>0;index++,i--)
   {
      if(lpad)
 	 {
@@ -197,12 +198,15 @@ void BuildStringA(uint8_t lpad,uint8_t rpad,char msg[])
 	   messageA[index] = 0x1F; 
 	 }
   }  
+  messageA[++index] = '\0'; // To mark end of String 
+ 
 }
 
 void BuildStringB(uint8_t lpad,uint8_t rpad,char msg[])
 {
   uint8_t msglen = strlen(msg)>6?6:strlen(msg);
-  for(int i=lpad+rpad+msglen,index = 0,j=0;i>0;index++,i--)
+  int8_t index = 0;
+  for(int8_t i=lpad+rpad+msglen,j=0;i>0;index++,i--)
   {
      if(lpad)
 	 {
@@ -219,7 +223,9 @@ void BuildStringB(uint8_t lpad,uint8_t rpad,char msg[])
 	   rpad--;
 	   messageB[index] = 0x1F; 
 	 }
-  }  
+  } 
+  messageB[++index] = '\0'; // To mark end of String 
+  
 }
 	
 int main(void)
