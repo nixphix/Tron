@@ -102,7 +102,6 @@ void BuildMsg()
 	   case 0x00:
 	    lpad=7;rpad=6;
 		teamA[0]='H';teamA[1]='O';teamA[2]='M';teamA[3]='E';teamA[6]=0X04;
-	   // strcpy(teamA,"HOME");
 	    break;
 		
 	   case 1:
@@ -140,7 +139,6 @@ void BuildMsg()
 	   case 0x00:
 	    lpad=6;rpad=7;
 		teamB[0]='A';teamB[1]='W';teamB[2]='A';teamB[3]='Y';teamB[6]=0X04;
-	    //strcpy(teamB,"AWAY");
 	    break;
 		
 	   case 1:
@@ -171,9 +169,6 @@ void BuildMsg()
         lpad=rpad=0;	
 	}
     BuildStringB(lpad,rpad,teamB);
-	
-	//strcpy(message,messageA);
-	//strcat(message,messageB);
 	uint8_t _index=0,_ind=0;
 	while(messageA[_ind]!=0x12)
 	{
@@ -258,49 +253,21 @@ int main(void)
 	
 	USART_Init(103);
 	USART_Intr();
-	//len = strlen(message);
+	
 	HC595Init();
 
 	sei();
-	//ii=iii=0; not used
+	
 	
 	while(1)
 	{
 	  if(REFRESH_FLAG==1)
 	  {
 	    BuildMsg();
-	    //len = strlen(message);
+	    
 	    REFRESH_FLAG = 0;
 	  }
-	/*strcpy(message,teamA);
-	
-	strcat(message,teamB);
-	
-	_delay_ms(1500);
-	*/
-	for(int _k=0;_k<34;_k++)
-	{
-	   USART_Transmit(message[_k]);
-	   //USART_Transmit(teamA[_k]);
-	  // USART_Transmit(teamB[_k]);
-	}
-	_delay_ms(2500);
-	
-	/*       USART_Transmit(0x00);
-		   USART_Transmit(strlen(teamA));
-		   USART_Transmit(0x00);
-
-	
-	for(int _k=0;_k<6;_k++)
-	{
-	   //USART_Transmit(message[_k]);
-	 //  USART_Transmit(teamA[_k]);
-	   USART_Transmit(teamB[_k]);
-	}
-		   USART_Transmit(0x00);
-		   USART_Transmit(strlen(teamB));
-		   USART_Transmit(0x00);*/
-	
+		
 	}
 	return 0;
 }
@@ -309,7 +276,6 @@ ISR(TIMER1_OVF_vect)
 {
 	PORTC=0x00;
 	PORTD&=(~(1<<PD7));
-	//PORTD&=(~(1<<PD6)); PC5 is assigned to this
 	TCNT1=0xFFC0;	
 	static uint8_t row;
 	
@@ -381,8 +347,6 @@ ISR(USART_RXC_vect) // 0 - Addr, 1 - Data, 2 - CHKSUM
       case 2:
        		
    	       CHK_SUM^=RXC_ISR_DATA[1];
-		  // USART_Transmit(RXC_ISR_DATA[0]); 
-		  // USART_Transmit(RXC_ISR_DATA[1])   ;
         break;
 	  case 3:
 	       if(RXC_ISR_DATA[2]==CHK_SUM)
@@ -397,7 +361,6 @@ ISR(USART_RXC_vect) // 0 - Addr, 1 - Data, 2 - CHKSUM
 				  case 105:
 				  case 106:
 				     teamA[RXC_ISR_DATA[0]-100]=RXC_ISR_DATA[1];
-				     //teamA[RXC_ISR_DATA[0]-99]='\0';
 					 REFRESH_FLAG=1;
 					 break;
 					 
@@ -409,7 +372,6 @@ ISR(USART_RXC_vect) // 0 - Addr, 1 - Data, 2 - CHKSUM
 				  case 155:
 				  case 156:
 				     teamB[RXC_ISR_DATA[0]-150]=RXC_ISR_DATA[1];
-				     //teamB[RXC_ISR_DATA[0]-149]='\0';
 					 REFRESH_FLAG=1;
 					 break;			   
 			   }
