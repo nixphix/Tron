@@ -93,35 +93,35 @@ void SelectRow(uint8_t r)
 	}
 }
 	
-void BuildMsg()
+void BuildMsg(void)
 {
   uint8_t lpad=0,rpad=0;
 
     switch(teamA[6])
 	{
 	   case 0x00:
-	    lpad=7;rpad=6;
+	    lpad=rpad=6;
 		teamA[0]='H';teamA[1]='O';teamA[2]='M';teamA[3]='E';teamA[6]=0X04;
 	    break;
 		
 	   case 1:
-	    lpad=rpad=17;
+	    lpad=16;rpad=17;
 		break;
 		
 	   case 2:
-	    lpad=14;rpad=13;
+	    lpad=rpad=13;
 		break;
 		
 	   case 3:
-	    lpad=rpad=10;
+	    lpad=9;rpad=10;
 		break;
 		
 	   case 4:
-	    lpad=7;rpad=6;
+	    lpad=rpad=6;
 		break;
 		
 	   case 5:
-	    lpad=rpad=3;
+	    lpad=2;rpad=3;
 		break;
 		
 	   case 6:
@@ -142,23 +142,23 @@ void BuildMsg()
 	    break;
 		
 	   case 1:
-	    lpad=rpad=17;
+	    lpad=16;rpad=17;
 		break;
 		
 	   case 2:
-	    lpad=13;rpad=14;
+	    lpad=rpad=13;
 		break;
 		
 	   case 3:
-	    lpad=rpad=10;
+	    lpad=9;rpad=10;
 		break;
 		
 	   case 4:
-	    lpad=6;rpad=7;
+	    lpad=rpad=6;
 		break;
 		
 	   case 5:
-	    lpad=rpad=3;
+	    lpad=2;rpad=3;
 		break;
 		
 	   case 6:
@@ -190,8 +190,9 @@ void BuildMsg()
 void BuildStringA(uint8_t lpad,uint8_t rpad,char msg[])
 {
   uint8_t msglen = msg[6]>6?6:msg[6];
+  uint8_t spacer = msglen<5?msglen*2:10;
   int8_t index = 0;
-  for(int8_t i=lpad+rpad+msglen,j=0;i>0;index++,i--)
+  for(int8_t i=lpad+rpad+msglen+spacer,j=0;i>0;index++,i--)
   {
      if(lpad)
 	 {
@@ -200,7 +201,12 @@ void BuildStringA(uint8_t lpad,uint8_t rpad,char msg[])
 	 }
 	 else if(msglen)
 	 {
-	   messageA[index] = msg[j++];
+	   messageA[index++] = msg[j++];
+	   if(--i>0)
+	    {
+		   messageA[index++] = 0x1F;--i;
+		   messageA[index]   = 0x1F;
+		}
 	   msglen--;
 	 }
 	 else if(rpad)
@@ -216,8 +222,9 @@ void BuildStringA(uint8_t lpad,uint8_t rpad,char msg[])
 void BuildStringB(uint8_t lpad,uint8_t rpad,char msg[])
 {
   uint8_t msglen = msg[6]>6?6:msg[6];
+  uint8_t spacer = msglen<5?msglen*2:10;
   int8_t index = 0;
-  for(int8_t i=lpad+rpad+msglen,j=0;i>0;index++,i--)
+  for(int8_t i=lpad+rpad+msglen+spacer,j=0;i>0;index++,i--)
   {
      if(lpad)
 	 {
@@ -226,7 +233,12 @@ void BuildStringB(uint8_t lpad,uint8_t rpad,char msg[])
 	 }
 	 else if(msglen)
 	 {
-	   messageB[index] = msg[j++];
+	   messageB[index++] = msg[j++];
+	   if(--i>0)
+	    {
+		   messageB[index++] = 0x1F;--i;
+		   messageB[index]   = 0x1F;
+		}
 	   msglen--;
 	 }
 	 else if(rpad)
@@ -254,7 +266,7 @@ int main(void)
 	USART_Init(103);
 	USART_Intr();
 	
-	HC595Init();
+	HC595Init();-
 
 	sei();
 	
@@ -312,7 +324,7 @@ ISR(TIMER1_OVF_vect)
          
 		HC595Pulse();
          
-		if(++m==7) // the number of columns for a single character
+		if(++m==5) // the number of columns for a single character
 		{
 			chr++;
 			m=0;
