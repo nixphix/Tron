@@ -1,9 +1,9 @@
 //  32keys declaration
-#define PULLUP_ROW(X) PORTA = ((PORTA & 0xF0)||(1<<X))
-#define ROW1 PA0
-#define ROW2 PA1
-#define ROW3 PA2
-#define ROW4 PA3
+#define PULLUP_ROW(X) PORTA = ((PORTA & 0xE1)|(1<<X)) //PA1 to PA4
+#define ROW1 PA1
+#define ROW2 PA2
+#define ROW3 PA3
+#define ROW4 PA4
  
 #define COLUMN1 PB0
 #define COLUMN2 PB1
@@ -79,7 +79,7 @@ uint8_t _ext=0;
 #define AS9  0x05
 #define ASR  0x06
 #define AS1  0x07
-#define AS2  0x08
+#define _AS2  0x08
 #define AS3  0x09
 #define AF9  0x0A
 #define AFR  0x0B

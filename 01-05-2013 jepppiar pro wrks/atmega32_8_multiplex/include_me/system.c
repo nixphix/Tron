@@ -34,12 +34,13 @@
 		
        if(arr==1)	
 		 {
-		   dis2_PORT |= 0b00011000; // PB3 ,4
+		   dis2_PORT |= (1<<PB3)|(1<<PB4); // PB3 ,4
+		  // dis2_PORT |= 0b00011000; // PB3 ,4
 		 }
-       if(Buz==1)	
+      /* if(Buz==1)	
 		 {
 		   dis2_PORT |= 0b00000100; // PB2
-		 }		 
+		 }	*/	 
 	}
 	void scoBdigit(uint8_t one,uint8_t arr)	
    {

@@ -5,8 +5,8 @@ void _SYSTEM_INIT(void)
 	TCNT1=0xBDB; 															// set initial value to remove time error (16bit counter register)
 	TCCR1B = (1<<CS12)|(0<<CS11)|(0<<CS10); 								// start timer/ set clock
 	sei();
-	DDRA=0x0F;
-	PORTA=0X0F;
+	DDRA=0x1E;
+	PORTA=0X1E; // PA1 to PA4
 	DDRB=0x00;
 }
 	
@@ -46,7 +46,8 @@ uint8_t check1_32keys(void)
 {
 	
 	//pad =0b11111110;
-	PULLUP_ROW(ROW1);
+	//PULLUP_ROW(ROW1);
+	PORTA =0b11111101;
 	debounce();
 	
 	if(bit_is_clear(PINB,COLUMN1))
@@ -56,7 +57,7 @@ uint8_t check1_32keys(void)
 	else if(bit_is_clear(PINB,COLUMN3))
 	return(AS1);
 	else if(bit_is_clear(PINB,COLUMN4))
-	return(AS2);
+	return(_AS2);
 	else if(bit_is_clear(PINB,COLUMN5))
 	return(AS3);
 	else if(bit_is_clear(PINB,COLUMN6))
@@ -74,7 +75,8 @@ uint8_t check1_32keys(void)
 uint8_t check2_32keys(void)
 {
 	//pad=0b11111101;
-    PULLUP_ROW(ROW2);
+   // PULLUP_ROW(ROW2);
+    PORTA =0b11111011;
 	debounce();
 	
 	if(bit_is_clear(PINB,COLUMN1))
@@ -83,7 +85,7 @@ uint8_t check2_32keys(void)
 	return(ATR);
 	else if(bit_is_clear(PINB,COLUMN3))
 	return(AT1);
-	else if(bit_-is_clear(PINB,COLUMN4))
+	else if(bit_is_clear(PINB,COLUMN4))
 	return(QT9);
 	else if(bit_is_clear(PINB,COLUMN5))
 	return(QTR);
@@ -101,7 +103,8 @@ uint8_t check2_32keys(void)
 uint8_t check3_32keys(void)
 {
 	//pad=0b11111011;
-	PULLUP_ROW(ROW3);
+	//PULLUP_ROW(ROW3);
+	PORTA =0b11110111;
 	debounce();
 
 	
@@ -129,9 +132,9 @@ uint8_t check3_32keys(void)
 uint8_t check4_32keys(void)
 {
 	//pad =0b11110111;
-	PULLUP_ROW(ROW4);
+	//PULLUP_ROW(ROW4);
+	PORTA =0b11101111;
 	debounce();
-		
 		
 	if(bit_is_clear(PINB,COLUMN1))
 	return(BT9);

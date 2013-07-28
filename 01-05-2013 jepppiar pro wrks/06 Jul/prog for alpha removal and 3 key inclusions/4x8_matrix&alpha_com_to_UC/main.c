@@ -1,8 +1,8 @@
 #include<avr/io.h>
 #include<util/delay.h>
 #include<avr/interrupt.h>
-#include"keypad_uc.h"
-#include<keypad_uc.c>
+#include"include_me/keypad_uc.h"
+#include"include_me/keypad_uc.c"
 
 int main(void)
 {
@@ -10,7 +10,7 @@ int main(void)
 	
 	while(1)
 	{
-	keypad_32keys();	
+	  keypad_32keys();	
 	}
 	return 0;
 	

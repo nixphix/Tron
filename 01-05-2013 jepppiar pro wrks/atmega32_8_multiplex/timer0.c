@@ -45,29 +45,29 @@ int main(void)
 				GC=2;
 				
 		}
-		
-		
-
+		 
+		 
+         
 		display1(BT);
 				
    		PORTC = 0b10000000;
 		 _delay_ms(1);
 		PORTC = 0b00000000;
 		_delay_us(100);
-  
+         
 		display1(BF); 
-		
+		 
 		scoAdigit(ASH,ARO,buzzer);
-		
+		 
 		PORTC = 0b01000000;
 		 _delay_ms(1);
 		PORTC = 0b00000000;
 		_delay_us(100);
-		
-		
+		 
+	    	
 	    display1(QT);
 		scoBdigit(BSH,ARO);
-		
+		 
 		PORTC = 0b00100000;
 		 _delay_ms(1);
 		PORTC = 0b00000000;
