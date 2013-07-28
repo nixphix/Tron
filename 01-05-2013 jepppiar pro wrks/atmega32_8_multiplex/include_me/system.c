@@ -21,24 +21,24 @@
 		else if(d==1,e==0&&f==1)		{dis2_PORT = 0b11000010;}
 		else if(d==0,e==1&&f==1)		{dis2_PORT = 0b00011010;}
 		else if(d==1,e==1&&f==1)		{dis2_PORT = 0b01111010;}*/
-		 dis2_PORT = 0x00;
+		 dis2_PORT = 0x00;//portb
         if(one==1)	
 		 {
-		   dis2_PORT = (1<<PB5)|(1<<PB6);
+		   dis2_PORT |= (1<<PB5)|(1<<PB6);
 		 }
 		 else if(one==0)	
 		 {
-		   dis2_PORT = (0<<PB5)|(0<<PB6);
+		   dis2_PORT &= ~((1<<PB5)|(1<<PB6));
 		 }
 		 
 		
        if(arr==1)	
 		 {
-		   dis2_PORT |= 0b00011000;
+		   dis2_PORT |= 0b00011000; // PB3 ,4
 		 }
        if(Buz==1)	
 		 {
-		   dis2_PORT |= 0b00000100;
+		   dis2_PORT |= 0b00000100; // PB2
 		 }		 
 	}
 	void scoBdigit(uint8_t one,uint8_t arr)	
@@ -54,7 +54,7 @@
 		 }
 		else if(one==0)	
 		 {
-		   dis2_PORT = (0<<PB5)|(0<<PB6);
+		   dis2_PORT &= ~((1<<PB5)|(1<<PB6));
 		 }
        if(arr==0)	
 		 {
