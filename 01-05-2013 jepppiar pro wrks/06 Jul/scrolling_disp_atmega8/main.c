@@ -24,9 +24,9 @@ volatile PGM_P ptr=smallFont;
 volatile uint8_t len;  // max number of char in message
 
 //Message to display
-volatile char message[11] = {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},messageA[40],messageB[40] ;//={0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,'H','O','M','E',0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,'A','W','A','Y',0x1F,0x1F,0x1F,0x1F,0x1F,};
-volatile char teamA[6], teamB[6], REFRESH_FLAG = 0 ;//updated by USART RXC ISR
-
+volatile char message[80]; //= {0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,'H','O','M','E',0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,'A','W','A','Y',0x1F,0x1F,0x1F,0x1F,0x1F};
+volatile char messageA[40],messageB[40];
+volatile char teamA[7] = {' ',' ',' ',' ',' ',' ',0x00}, teamB[7] = {' ',' ',' ',' ',' ',' ',0x00}, REFRESH_FLAG = 0 ;//updated by USART RXC ISR
 
 void HC595Init(void);
 void HC595Pulse(void);
@@ -93,15 +93,16 @@ void SelectRow(uint8_t r)
 	}
 }
 	
-/*void BuildMsg()
+void BuildMsg()
 {
-  uint8_t len = strlen(teamA),lpad=0,rpad=0;
+  uint8_t lpad=0,rpad=0;
 
-    switch(len)
+    switch(teamA[6])
 	{
-	   case 0:
+	   case 0x00:
 	    lpad=7;rpad=6;
-	  //  strcpy(teamA,"HOME");
+		teamA[0]='H';teamA[1]='O';teamA[2]='M';teamA[3]='E';teamA[6]=0X04;
+	   // strcpy(teamA,"HOME");
 	    break;
 		
 	   case 1:
@@ -134,12 +135,12 @@ void SelectRow(uint8_t r)
     BuildStringA(lpad,rpad,teamA);
 	
 	
-	len = strlen(teamB);
-    switch(len)
+    switch(teamB[6])
 	{
-	   case 0:
+	   case 0x00:
 	    lpad=6;rpad=7;
-	  //  strcpy(teamB,"AWAY");
+		teamB[0]='A';teamB[1]='W';teamB[2]='A';teamB[3]='Y';teamB[6]=0X04;
+	    //strcpy(teamB,"AWAY");
 	    break;
 		
 	   case 1:
@@ -171,14 +172,29 @@ void SelectRow(uint8_t r)
 	}
     BuildStringB(lpad,rpad,teamB);
 	
-	strcpy(message,strupr(messageA));
-	strcat(message,strupr(messageB));
+	//strcpy(message,messageA);
+	//strcat(message,messageB);
+	uint8_t _index=0,_ind=0;
+	while(messageA[_ind]!=0x12)
+	{
+	   message[_index]=messageA[_ind];
+	   _ind++;
+	   _index++;
+	}
+	_ind=0;
+	while(messageB[_ind]!=0x12)
+	{
+	   message[_index]=messageB[_ind];
+	   _ind++;
+	   _index++;
+	}
+	message[_index]=0x12;
 	
 }
 
 void BuildStringA(uint8_t lpad,uint8_t rpad,char msg[])
 {
-  uint8_t msglen = strlen(msg)>6?6:strlen(msg);
+  uint8_t msglen = msg[6]>6?6:msg[6];
   int8_t index = 0;
   for(int8_t i=lpad+rpad+msglen,j=0;i>0;index++,i--)
   {
@@ -198,13 +214,13 @@ void BuildStringA(uint8_t lpad,uint8_t rpad,char msg[])
 	   messageA[index] = 0x1F; 
 	 }
   }  
-//  messageA[++index] = '\0'; // To mark end of String 
+  messageA[index] = 0x12; // To mark end of String 
  
 }
 
 void BuildStringB(uint8_t lpad,uint8_t rpad,char msg[])
 {
-  uint8_t msglen = strlen(msg)>6?6:strlen(msg);
+  uint8_t msglen = msg[6]>6?6:msg[6];
   int8_t index = 0;
   for(int8_t i=lpad+rpad+msglen,j=0;i>0;index++,i--)
   {
@@ -224,9 +240,9 @@ void BuildStringB(uint8_t lpad,uint8_t rpad,char msg[])
 	   messageB[index] = 0x1F; 
 	 }
   } 
-//  messageB[++index] = '\0'; // To mark end of String 
+  messageB[index] = 0x12; // To mark end of String 
   
-}*/
+}
 	
 int main(void)
 {
@@ -237,7 +253,8 @@ int main(void)
 	DDRC=0xFF;
 	DDRD=0XF0;
 	
-	//BuildMsg();
+	teamA[6]=0x00;teamB[6]=0x00;
+	BuildMsg();
 	
 	USART_Init(103);
 	USART_Intr();
@@ -249,17 +266,40 @@ int main(void)
 	
 	while(1)
 	{
-	  /*if(REFRESH_FLAG==1)
+	  if(REFRESH_FLAG==1)
 	  {
 	    BuildMsg();
-	    len = strlen(message);
+	    //len = strlen(message);
 	    REFRESH_FLAG = 0;
-	  }*/
-	strcpy(message,strupr(teamA));
+	  }
+	/*strcpy(message,teamA);
 	
-	strcat(message,strupr(teamB));
+	strcat(message,teamB);
 	
 	_delay_ms(1500);
+	*/
+	for(int _k=0;_k<34;_k++)
+	{
+	   USART_Transmit(message[_k]);
+	   //USART_Transmit(teamA[_k]);
+	  // USART_Transmit(teamB[_k]);
+	}
+	_delay_ms(2500);
+	
+	/*       USART_Transmit(0x00);
+		   USART_Transmit(strlen(teamA));
+		   USART_Transmit(0x00);
+
+	
+	for(int _k=0;_k<6;_k++)
+	{
+	   //USART_Transmit(message[_k]);
+	 //  USART_Transmit(teamA[_k]);
+	   USART_Transmit(teamB[_k]);
+	}
+		   USART_Transmit(0x00);
+		   USART_Transmit(strlen(teamB));
+		   USART_Transmit(0x00);*/
 	
 	}
 	return 0;
@@ -272,6 +312,7 @@ ISR(TIMER1_OVF_vect)
 	//PORTD&=(~(1<<PD6)); PC5 is assigned to this
 	TCNT1=0xFFC0;	
 	static uint8_t row;
+	
 	
 	int8_t col;
 	int8_t chr = 0;						//iii;
@@ -297,20 +338,20 @@ ISR(TIMER1_OVF_vect)
 		{
 			data = 0x00;
 		}
-	
+	     
 		if((data & (1<<row)))
 			HC595DataHigh();
 		else
 			HC595DataLow();
-
+         
 		HC595Pulse();
-
+         
 		if(++m==7) // the number of columns for a single character
 		{
 			chr++;
 			m=0;
-
-			if(chr >=32)
+         
+			if(chr >=80)
 				{chr=0;}
 		}			
 		
@@ -328,8 +369,8 @@ ISR(TIMER1_OVF_vect)
 
 ISR(USART_RXC_vect) // 0 - Addr, 1 - Data, 2 - CHKSUM
 {
-     RXC_ISR_DATA[RXC_ISR_INDEX]=UDR;
-   RXC_ISR_INDEX++;
+    RXC_ISR_DATA[RXC_ISR_INDEX]=UDR;
+    RXC_ISR_INDEX++;
  
    switch(RXC_ISR_INDEX)
    {
@@ -341,7 +382,7 @@ ISR(USART_RXC_vect) // 0 - Addr, 1 - Data, 2 - CHKSUM
        		
    	       CHK_SUM^=RXC_ISR_DATA[1];
 		  // USART_Transmit(RXC_ISR_DATA[0]); 
-			USART_Transmit(RXC_ISR_DATA[1])   ;
+		  // USART_Transmit(RXC_ISR_DATA[1])   ;
         break;
 	  case 3:
 	       if(RXC_ISR_DATA[2]==CHK_SUM)
@@ -354,7 +395,9 @@ ISR(USART_RXC_vect) // 0 - Addr, 1 - Data, 2 - CHKSUM
 				  case 103:
 				  case 104:
 				  case 105:
+				  case 106:
 				     teamA[RXC_ISR_DATA[0]-100]=RXC_ISR_DATA[1];
+				     //teamA[RXC_ISR_DATA[0]-99]='\0';
 					 REFRESH_FLAG=1;
 					 break;
 					 
@@ -364,7 +407,9 @@ ISR(USART_RXC_vect) // 0 - Addr, 1 - Data, 2 - CHKSUM
 				  case 153:
 				  case 154:
 				  case 155:
+				  case 156:
 				     teamB[RXC_ISR_DATA[0]-150]=RXC_ISR_DATA[1];
+				     //teamB[RXC_ISR_DATA[0]-149]='\0';
 					 REFRESH_FLAG=1;
 					 break;			   
 			   }

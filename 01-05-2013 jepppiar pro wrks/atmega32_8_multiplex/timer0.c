@@ -311,12 +311,14 @@ ISR(USART_RXC_vect) // @ brd side
 				  case 103:
 				  case 104:
 				  case 105:
+				  case 106:
 				  case 150://NBB
 				  case 151:
 				  case 152:
 				  case 153:
 				  case 154:
 				  case 155:
+				  case 156:
 				    NB_Tx(RXC_ISR_DATA[1],RXC_ISR_DATA[2]); // 3 byte packet
 				    break;
 			   }

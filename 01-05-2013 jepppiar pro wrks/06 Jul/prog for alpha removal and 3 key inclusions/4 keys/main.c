@@ -623,15 +623,19 @@ void sendNB(void)
    {
      while(teama[i]!=0x01) 
 	 {
-       USART_Tx128(i+100,teama[i++]);
-	 }  
+       USART_Tx128(i+100,teama[i]);
+	   i++;
+	 } 
+     USART_Tx128(106,i);// total no of char
    }
    else if(menu == 3)
    {
      while(teamb[i]!=0x01) 
 	 {
-       USART_Tx128(i+150,teamb[i++]);
+       USART_Tx128(i+150,teamb[i]);
+	   i++;
 	 }  
+     USART_Tx128(156,i);// total no of char
    }
 
 
