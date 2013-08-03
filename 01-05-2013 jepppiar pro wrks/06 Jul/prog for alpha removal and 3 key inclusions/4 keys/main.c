@@ -417,21 +417,30 @@ rx_char=UDR0;
 		 break;	  
 	     
 	  	 case AS1:
-		  AS++;
+		  if(AS<199)
+		  {AS++;}
+		  else
+		  {AS=0;}
 		  USART_Tx128(AS_AD,AS);
 		  
 		 break;
 		 
 	     case AS2:
-		  AS+=2;
+		  if(AS<198)
+		  {AS+=2;}
+		  else
+		  {AS=0;}
 		  USART_Tx128(AS_AD,AS);
 		  
          
 		 break;	 
          
 	     case AS3:
-		  AS+=3;
-		  USART_Tx128(AS_AD,AS);
+		  if(AS<197)
+		  {AS+=3;}
+		  else
+		  {AS=0;}		
+          USART_Tx128(AS_AD,AS);
 		  
 		  
 		 break;
@@ -476,7 +485,8 @@ rx_char=UDR0;
 		 
 	     case BS9:
 		  BS--;
-		  if(BS<0) {BS=0;}
+		  if(BS<0)
+		  {BS=0;}
 		  USART_Tx128(BS_AD,BS); 
 		 
          
@@ -489,22 +499,29 @@ rx_char=UDR0;
 		 break;
 		 
 	     case BS1:
-		  BS++;
+		  if(BS<199)
+		  {BS++;}
+		  else
+		  {BS=0;}
 		  USART_Tx128(BS_AD,BS); 
 	     
 		 
 		 break;
 		 
 	     case BS2:
-		  BS+=2;
-		 
+		  if(BS<198)
+		  {BS+=2;}
+		  else
+		  {BS=0;}
 		  USART_Tx128(BS_AD,BS);
 		 
 		 break;
 		 
 	     case BS3:
-		  BS+=3;
-		  
+		  if(BS<197)
+		  {BS+=3;}
+		  else
+		  {BS=0;}		  
 		  USART_Tx128(BS_AD,BS);
 	     
 		 break;
