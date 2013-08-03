@@ -181,6 +181,55 @@ if(__z<100)
 }
 }
 
+void lcdScore(uint8_t __y,uint8_t __x,uint8_t __z)
+{
+
+int u,v,w,t;
+if(__z>99) 				// 198
+{
+	
+	u=((__z/100)*5)+80;			// 1
+	v=(__z%100);			//98
+	w=((v/10)*5)+80;			//9
+	t=((v%10)*5)+80;			//8
+	setcolumn(__y);
+	setpage(__x);	
+    lcddata(&font5x7[u],5);
+	lcddata(&font5x7[w],5);
+	lcddata(&font5x7[t],5);
+}
+if(__z<100)
+{
+	w=((__z/10)*5)+80;			//9
+	t=((__z%10)*5)+80;			//8
+	setcolumn(__y);
+	setpage(__x);
+	if(w!=80)
+	{
+	  lcddata(&font5x7[w],5);
+	  lcddata(&z,1);
+	}
+	else
+	{
+	  lcddata(&z,1);
+	  lcddata(&z,1);
+	  lcddata(&z,1);
+	  lcddata(&z,1);
+	  lcddata(&z,1);
+	  lcddata(&z,1);
+	}
+	lcddata(&font5x7[t],5);
+	lcddata(&z,1);
+	lcddata(&z,1);//clear 3rd digit
+	lcddata(&z,1);
+	lcddata(&z,1);
+	lcddata(&z,1);
+	lcddata(&z,1);
+	lcddata(&z,1);
+	
+}
+}
+
 void lcd_bs(uint8_t ___y)
 {
 lcddata(&font5x7[0],___y);

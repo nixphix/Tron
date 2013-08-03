@@ -21,11 +21,41 @@ void renderDisp(void)
 {
      //clrlcd();
 	 
-	 lcdnumdata(26,3,AS);
-	 lcdnumdata(90,3,BS);
-	 lcdnumdata(62,7,QT);
+	 lcdScore(26,3,AS);
+	 lcdScore(90,3,BS);
+	 lcdnumdata(61,7,QT);
 	 lcdnumdata(8,7,AF);
-	 lcdnumdata(113,7,BF);	 
+	 lcdnumdata(113,7,BF);
+	 
+	 /*if(AS>99)
+	 {
+	   ASH_U = 1;
+	 }
+	 else if((ASH_U==1)&(AS<100))
+	 {
+	   ASH_D = 1;
+	 }
+	 
+	 if(BS>99)
+	 {
+	   BSH_U = 1;
+	 }
+	 else if((BSH_U==1)&(AS<100))
+	 {
+	   BSH_D = 1;
+	 }
+	 
+	 if(ASH==1)
+	 {
+	    clrlcd();
+		ASH=0;
+	 }
+	 else if(BSH==1)
+	 {
+	    clrlcd();
+		BSH=0;
+	 }*/
+	 
 }
 
 void t1_rst(void)
@@ -488,7 +518,7 @@ rx_char=UDR0;
 	  	 case AF1:
 		  AF++;
 		  if(AF>5)
-		  {AF=0;}
+		  {AF=5;}
 		  USART_Tx128(AF_AD,AF);   
 		 
 		 break;
@@ -506,7 +536,7 @@ rx_char=UDR0;
 		 
 		 case AT1:
 		  AT++;
-		   if(AT>5) {AT=0;}
+		   if(AT>5) {AT=5;}
 		  USART_Tx128(AT_AD,AT);   
 		 break;
 		 
@@ -571,7 +601,7 @@ rx_char=UDR0;
 	     case BF1:
 		  BF++;
 		  if(BF>5)
-		  {BF=0;}
+		  {BF=5;}
 		  USART_Tx128(BF_AD,BF); 
 			
 		 break;
@@ -589,7 +619,7 @@ rx_char=UDR0;
 		 
 	     case BT1:
 		  BT++;
-		  if(BT>5) {BT=0;}
+		  if(BT>5) {BT=5;}
 		  USART_Tx128(BT_AD,BT);   
 		 break;
 		 
@@ -608,7 +638,7 @@ rx_char=UDR0;
 		 
 	     case QT1:
 		  QT++;
-		  if(QT>5) {QT=0;}
+		  if(QT>5) {QT=5;}
 		  USART_Tx128(QT_AD,QT); 
 
 		 break;

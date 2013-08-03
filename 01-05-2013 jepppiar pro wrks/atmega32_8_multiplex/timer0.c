@@ -18,7 +18,11 @@ int main(void)
 	sei();		   
 
    while(1)							//Infinie loop
+  
    {
+   
+		if(GCSP==1)
+		{Timer1DIS();}
         
 		if(GC!=2)
 		{
@@ -116,7 +120,8 @@ int main(void)
 			seconds=0;
 			Buzz(1);
 			//buzzer=1;
-		}		 
+		}		
+ 
 	}
 	return 0;
  }
