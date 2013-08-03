@@ -20,42 +20,11 @@ void sendNB(void);
 void renderDisp(void)
 {
      //clrlcd();
-	 
 	 lcdScore(26,3,AS);
 	 lcdScore(90,3,BS);
 	 lcdnumdata(61,7,QT);
 	 lcdnumdata(8,7,AF);
 	 lcdnumdata(113,7,BF);
-	 
-	 /*if(AS>99)
-	 {
-	   ASH_U = 1;
-	 }
-	 else if((ASH_U==1)&(AS<100))
-	 {
-	   ASH_D = 1;
-	 }
-	 
-	 if(BS>99)
-	 {
-	   BSH_U = 1;
-	 }
-	 else if((BSH_U==1)&(AS<100))
-	 {
-	   BSH_D = 1;
-	 }
-	 
-	 if(ASH==1)
-	 {
-	    clrlcd();
-		ASH=0;
-	 }
-	 else if(BSH==1)
-	 {
-	    clrlcd();
-		BSH=0;
-	 }*/
-	 
 }
 
 void t1_rst(void)
@@ -101,16 +70,7 @@ int main(void)
 		 lcdputN(78,1,teamb);
 		 renderDisp();
 		 
-	/*	 lcdputs2(46,2,ar3);		//score 
-	     lcdputs2(5,6,ar4);
-	     lcdputs2(110,6,ar4);		//FOUL
-	     lcdputs2(58,6,ar6);
-	     
-	     lcdnumdata(25,3,AS);
-	     lcdnumdata(85,3,BS);
-	     lcdnumdata(55,7,QT);
-	     lcdnumdata(5,7,AF);
-	     lcdnumdata(110,7,BF);*/ // moved to renderImg()
+
 		  menu++;
 		}
 		else if(menu == 1)
@@ -150,12 +110,7 @@ int main(void)
 				}
 			}
 		}
-		
-		
-		
 		// now analyze the team names and put them into a PROPER array format.
-		
-		
 		if(_av==2) // home button
 		{
 			//_ch=0;
@@ -420,9 +375,6 @@ uint8_t check_key_4keys(void)
 	return 0xFF;
 }
 
-
-
-
 uint8_t keypad_4keys(void)
 {
 		//PORTA=0x00;
@@ -448,7 +400,6 @@ uint8_t keypad_4keys(void)
 		}
 		return 0xFF;
 }
-
 
 ISR(USART0_RX_vect)  // @ CTrL side
 {
@@ -646,6 +597,7 @@ rx_char=UDR0;
 	     case GC9: 
 		  //minutes-1, seconds=0
 		  USART_Tx128(GC_AD,gcm);   // gcm=9
+		  
 		    
 		 break;
 		 
@@ -684,12 +636,6 @@ rx_char=UDR0;
 		 break;
 	  }
 	 renderDisp();
-	 /*clrlcd();
-	 lcdnumdata(25,3,AS);
-	 lcdnumdata(85,3,BS);
-	 lcdnumdata(55,7,QT);
-	 lcdnumdata(5,7,AF);
-	 lcdnumdata(110,7,BF);*/ // moved to renderImg()
  }
 
 void sendNB(void)
