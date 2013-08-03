@@ -3,9 +3,9 @@
 #include<util/delay.h>
 #include<inttypes.h>
 #include<avr/interrupt.h>
-#include<main.h>
+#include "dep/main.h"
 #include<at128_USART.c>
-#include<GLCD.c>
+#include "dep/GLCD.c" //
 #include"global.c"
 #include<sportronix.h>
 

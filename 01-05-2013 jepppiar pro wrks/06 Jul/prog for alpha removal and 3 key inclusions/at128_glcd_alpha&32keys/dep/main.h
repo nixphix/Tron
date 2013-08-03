@@ -26,7 +26,7 @@ void lcd_bs(unsigned char ___y);
 
 
 
-unsigned char c,z=0;
+int8_t c,z=0;
 unsigned char ar0[]="SCORE MATE";
 unsigned char ar1[]="TEAM A";
 unsigned char ar2[]="TEAM B";                 
