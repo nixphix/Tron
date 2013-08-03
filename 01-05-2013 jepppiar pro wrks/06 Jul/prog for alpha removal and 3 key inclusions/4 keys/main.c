@@ -49,8 +49,11 @@ int main(void)
 
 	USART_Init(103);
 	TIMSK=(1<<TOIE1); // enabled global and timer overflow interrupt;
+	ETIMSK=(1<<TOIE3);
 	TCNT1=0xBDB; // set initial value to remove time error (16bit counter register)
+	TCNT3=0xBDB;
 	TCCR1B = (1<<CS12)|(0<<CS11)|(0<<CS10); // start timer/ set clock
+	TCCR3B = (1<<CS32)|(0<<CS31)|(0<<CS30);
 	DDRA=0x0F;
 	PORTA=0X0F;
 	DDRC=0xFF;
@@ -65,6 +68,8 @@ int main(void)
 	
 	while(1)
 	{
+	
+
 		_av=keypad_4keys();
 		
 		// get into this loop only when the home button is pressed, also clear the existing team names since there s no option for backspace		
@@ -72,7 +77,7 @@ int main(void)
 		if(menu == 3)
 		{
 		  USART_RxIntEN();
-          dispClear();
+          dispclear();
 		  renderDisp();
 		  menu++;
 		}
@@ -352,6 +357,25 @@ ISR(TIMER1_OVF_vect)
   
 }
 
+ISR(TIMER3_OVF_vect) 
+{
+	
+  TCNT3=0xBDC; // set initial value to remove time error (16bit counter register)
+  if(TF_RST==0)
+  {
+   seconds--;
+  }
+  
+  if(seconds==-1)
+  {
+    TF_RST=1;
+    seconds=24;
+    //transmit usat(TF_AD,seconds)
+  }
+  
+  USART_Tx128(SHC_AD,seconds);
+}
+
 	
 void debounce(void)
 {
@@ -600,20 +624,22 @@ rx_char=UDR0;
 	     case GC9: 
 		  //minutes-1, seconds=0
 		  USART_Tx128(GC_AD,gcm);   // gcm=9
-		  
-		    
+		  seconds=24;
+		  TF_RST=1;		    
 		 break;
 		 
 	     case GCR: 
 		  //timer reset;
 		  USART_Tx128(GC_AD,gcrst); // gcrst=0
-			   
-		 break;
+		  seconds=24;
+		  TF_RST=1;	
+ 		 break;
 		 
 	     case GC1: 
 		 // minutes+1, seconds=0
 		  USART_Tx128(GC_AD,gcp); // gcp=1
-			  
+		  seconds=24;
+		  TF_RST=1;			  
 		 break;
 		 
 	     case GSP:  // actually it is arrow
@@ -625,17 +651,40 @@ rx_char=UDR0;
 	     case R24: // actually it is gsp
 		  
 		  USART_Tx128(GCSP_AD,0); 
+		  GCSP^=1;
+		  TF_RST=GCSP;
 		  
 		 break;
 		 
 	     case R13: // actually it is 24 sec reset
 		  
-		   USART_Tx128(TFR_AD,TF_rp);    
+		   USART_Tx128(TFR_AD,TF_rp); 
+           seconds=24;
+           if(GCSP==1) 
+		   {
+		     TF_RST=1;
+		   }
+		   else
+		   {
+		     TF_RST=0;
+		   }
 		 break;
 		 
-	     case BPT:  // 
+	     case BPT:  // 14s reset
 		   
 		  USART_Tx128(THR_AD,TF_rp);
+		  if(seconds<14)
+		  {
+           seconds=14;
+           if(GCSP==1) 
+		   {
+		     TF_RST=1;
+		   }
+		   else
+		   {
+		     TF_RST=0;
+		   }
+		  }
 		 break;
 	  }
 	 renderDisp();

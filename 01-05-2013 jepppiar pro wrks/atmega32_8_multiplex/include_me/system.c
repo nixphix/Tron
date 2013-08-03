@@ -2,7 +2,7 @@
 #define dis1_PORT PORTA   //timer
 #define dis2_PORT PORTB
  void SYS_INIT(void);
- void Buzz(uint8_t B);
+ void Buzz(void);
  void Timer1Init(void);
  void Timer0EN(void);
  void Timer0DIS(void);
@@ -20,18 +20,11 @@
 		DDRA = 0xFF;
    }   
    
-  void Buzz (uint8_t B)
+  void Buzz (void)
   {
-     if(B==1)
-	 {
 	   PORTD |= _BV(PD6);
 	   Timer0EN();
-	 }
-     else
-	 {
-	   PORTD &= ~(_BV(PD6));
-	   Timer0DIS();
-	 }
+	   buzCount=0;
   }
   
   void Timer1Init(void)
