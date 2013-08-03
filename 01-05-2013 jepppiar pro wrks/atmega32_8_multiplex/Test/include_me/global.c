@@ -75,7 +75,7 @@ volatile uint8_t VB_DATA=0;
 
 
 
-volatile int ASH=0,BSH=0,AS=0,AF=0,AT=0,BS=0,BF=0,BT=0,QT=0,ARO=0,GCSP=1,GC=2,gcm=9,gcrst=0,gcp=1;
+volatile int ASH=0,BSH=0,AS=0,AF=0,AT=0,BS=0,BF=0,BT=0,QT=0,ARO=0,GCSP=0,GC=2,gcm=9,gcrst=0,gcp=1;
 
 volatile uint8_t AS_AD=200,AF_AD=201,AT_AD=202,BS_AD=210,BF_AD=211,BT_AD=212,QT_AD=220,ARO_AD=221,GCSP_AD=222,GC_AD=223;
 

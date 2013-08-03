@@ -1,6 +1,12 @@
+
 #define START_BYTE 0x53
 #define dis1_PORT PORTA   //timer
 #define dis2_PORT PORTB
+#define PA_DISP(x) PORTA=(1<<x)
+#define PB_DISP(x) PORTB=(1<<x)
+#define SEL(x) PORTC=(1<<x)
+
+
  void SYS_INIT(void)
   {
 		//MCUCSR |= (1<<JTD);	//This statement will enable PORTC and it should be written twice
@@ -11,59 +17,61 @@
 		DDRA = 0xFF;
    }   
    
-   void scoAdigit(uint8_t one,uint8_t arr)	
+
+  /* void scoAdigit(uint8_t one,uint8_t arr,uint8_t Buz)	
    {
-		/*if(d==1&&e==1&&f==0)			{dis2_PORT = 0b01111000;}
+		if(d==1&&e==1&&f==0)			{dis2_PORT = 0b01111000;}
 		else if(d==1,e==0&&f==0)		{dis2_PORT = 0b01100000;}
 		else if(d==0,e==1&&f==0)		{dis2_PORT = 0b00011000;}
 		else if(d==0,e==0&&f==0)		{dis2_PORT = 0b00000000;}
 		else if(d==0,e==0&&f==1)		{dis2_PORT = 0b00000010;}
 		else if(d==1,e==0&&f==1)		{dis2_PORT = 0b11000010;}
 		else if(d==0,e==1&&f==1)		{dis2_PORT = 0b00011010;}
-		else if(d==1,e==1&&f==1)		{dis2_PORT = 0b01111010;}*/
-		 dis2_PORT = 0x00;//portb
+		else if(d==1,e==1&&f==1)		{dis2_PORT = 0b01111010;}
+		dis2_PORT = 0x00;//portb
         if(one==1)	
 		 {
-		   dis2_PORT |= (1<<PB1)|(1<<PB2);
+		   dis2_PORT |= (1<<PB5)|(1<<PB6);
 		 }
 		 else if(one==0)	
 		 {
-		   dis2_PORT &= ~((1<<PB1)|(1<<PB2));
+		   dis2_PORT &= ~((1<<PB5)|(1<<PB6));
 		 }
-       if(arr==1)	
+		 
+        if(arr==1)	
 		 {
-		   dis2_PORT |= (1<<PB4); // PB3 ,4
+		   dis2_PORT |= (1<<PB3)|(1<<PB4); // PB3 ,4
 		  // dis2_PORT |= 0b00011000; // PB3 ,4
 		 }
-      /* if(Buz==1)	
+        if(Buz==1)	
 		 {
 		   dis2_PORT |= 0b00000100; // PB2
-		 }	*/	 
+		 }		 
 	}
 	void scoBdigit(uint8_t one,uint8_t arr)	
-   {
-		/*if(d==1&&e==0)			{dis2_PORT = 0b01111000;}
+    {
+		//if(d==1&&e==0)			{dis2_PORT = 0b01111000;}
 		else if(d==1&e==1)		{dis2_PORT = 0b01100000;}
 		else if(d==0e==0)		{dis2_PORT = 0b00011000;}
-		else if(d==0,e==1)		{dis2_PORT = 0b00000000;}*/
+		else if(d==0,e==1)		{dis2_PORT = 0b00000000;}
 		dis2_PORT = 0x00;
 	   if(one==1)	
 		 {
-		   dis2_PORT = (1<<PB1)|(1<<PB2);
+		   dis2_PORT = (1<<PB5)|(1<<PB6);
 		 }
-		else if(one==0)	
+	   else if(one==0)	
 		 {
-		   dis2_PORT &= ~((1<<PB1)|(1<<PB2));
+		   dis2_PORT &= ~((1<<PB5)|(1<<PB6));
 		 }
        if(arr==0)	
 		 {
-		   dis2_PORT |= (1<<PB4); // PB3 ,4
+		   dis2_PORT |= 0b00011000;
 		 }	
 		
-	} 
+	} */
  
-   void display1(uint8_t d)		//Define a function to display the number passed on the seven segment display
-{
+  void display1(uint8_t d)		//Define a function to display the number passed on the seven segment display
+  {
 	switch(d)			//Open a switch case
 	{
 		case 1: 
@@ -71,7 +79,7 @@
 		dis1_PORT = 0b00110000;
 		
 		break;			
-	
+	 
 		case 2: 
 		
 		dis1_PORT = 0b01101101;
@@ -125,7 +133,7 @@
 		
 	}
 
-}
+  }
 
 void display2(uint8_t e)		//Define a function to display the number passed on the seven segment display
 {
@@ -136,7 +144,7 @@ void display2(uint8_t e)		//Define a function to display the number passed on th
 		dis2_PORT = 0b00110000;
 		
 		break;			
-	
+	 
 		case 2: 
 		
 		dis2_PORT = 0b01101101;

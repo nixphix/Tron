@@ -1,0 +1,39 @@
+***************************************************************************************************************************************************************
+Tested on 7 jul 2013 by Prabakaran
+***************************************************************************************************************************************************************
+Desc: Displays a static string "TEAMABC" in 7*5+1space Pattern
+******************************************************************
+
+Hardware :
+
+1.MiniDev28 controller board
+2.Scrolling display brd with TIP127, ULN2803 and 74HC595 designed for JIT
+3.PSU Corsair CX600
+
+Connection:
+
+PSU
+===
+PSU=>  GND=> MiniDev28 (GND PINS NEAR PWR LED)
+PSU=>  +5V=> MiniDev28 (VCC PINS NEAR PWR LED)
+PSU=> +12V=> LedDisplay_TIP127_INPUT_BUS 8th PIN (VCC PIN\w TIP127 INPUT @bottom)
+PSU=> GND_12v=><=GND_5v <=PSU
+PSU=>  GND=> LedDisplay_GND_INPUT (@right above SPI input, +/- marked)
+PSU=>  +5V=> LedDisplay_+5V_INPUT (@right above SPI input, +/- marked)
+
+SPI - Vertical Drivers
+======================
+MiniDev28 PB0:2=> SPI_INPUT_LedDisplay 1:3 @right (not the one @left, Markers on corresponding brds)
+
+Horizontal Drivers
+==================
+PC0-> LedDisplay_TIP127_INPUT_BUS 1 @top
+...
+.
+.
+PC5-> LedDisplay_TIP127_INPUT_BUS 6 from top
+
+
+PD7-> LedDisplay_TIP127_INPUT_BUS 7 from top
+
+***************************************************************************************************************************************************************

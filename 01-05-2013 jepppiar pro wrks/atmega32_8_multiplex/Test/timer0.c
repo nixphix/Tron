@@ -8,25 +8,130 @@
 
 volatile int minutes = 10,seconds=0;
 
-
-
-
 int main(void)
-
  {	
 	SYS_INIT();
 	USART_Init(103);
 	USART_Intr();
-	//TIMSK|=(1<<TOIE1); // enabled global and timer overflow interrupt;
+	TIMSK=(1<<TOIE1); // enabled global and timer overflow interrupt;
 	TCNT1=0xBDB; // set initial value to remove time error (16bit counter register)
-	TCCR1B |= (1<<CS12)|(0<<CS11)|(0<<CS10); // start timer/ set clock
+	TCCR1B = (1<<CS12)|(0<<CS11)|(0<<CS10); // start timer/ set clock
 	sei();		
    
 
    while(1)							//Infinie loop
    {
-        
-		if(GC!=2)
+		
+		
+// Vertical scan - Selectline 	
+	/* for(int i=0;i<8;i++)
+     {
+	    SEL(i);
+		USART_Transmit('S');
+		USART_Transmit(i);
+		USART_Transmit(' ');
+		_delay_ms(500);		
+		  	 for(int j=0;j<8;j++)
+			 {
+			   PA_DISP(j);
+		   		USART_Transmit('A');
+	         	USART_Transmit(i);
+	         	USART_Transmit(' ');
+			   _delay_ms(200);				   
+			 }		
+	 }	*/
+	 for(int i=0;i<8;i++)
+     {
+	    SEL(i);
+		USART_Transmit('S');
+		USART_Transmit(i);
+		USART_Transmit(' ');
+		_delay_ms(500);		
+		  	 for(int j=0;j<8;j++)
+			 {
+			   PB_DISP(j);
+		   		USART_Transmit('B');
+	         	USART_Transmit(i);
+	         	USART_Transmit(' ');
+			   _delay_ms(200);				   
+			 }		
+	 }	
+	 
+	 _delay_ms(1000);				   
+// Horizontal Scan - Dataline
+	/* for(int i=0;i<8;i++)
+     {
+	    PA_DISP(i);
+		USART_Transmit('A');
+		USART_Transmit(i);
+		USART_Transmit(' ');
+		_delay_ms(500);		
+		  	 for(int j=0;j<8;j++)
+			 {
+			    SEL(j);
+		   		USART_Transmit('S');
+	         	USART_Transmit(i);
+	         	USART_Transmit(' ');
+			    _delay_ms(200);				   
+			 }		
+	 }	
+	 for(int i=0;i<8;i++)
+     {
+	    PA_DISP(i);
+		USART_Transmit('A');
+		USART_Transmit(i);
+		USART_Transmit(' ');
+		_delay_ms(500);	
+           for(int k=0;k<50;k++)
+		   {
+		  	 for(int j=0;j<8;j++)
+			 {
+			    SEL(j);
+		   		USART_Transmit('S');
+	         	USART_Transmit(i);
+	         	USART_Transmit(' ');
+			    _delay_ms(2);				   
+			 }
+           }	
+	 }	*/
+	 
+	 _delay_ms(500);				   
+	 for(int i=0;i<8;i++)
+     {
+	    PB_DISP(i);
+		USART_Transmit('B');
+		USART_Transmit(i);
+		USART_Transmit(' ');
+		_delay_ms(500);		
+		  	 for(int j=0;j<8;j++)
+			 {
+			    SEL(j);
+		   		USART_Transmit('S');
+	         	USART_Transmit(i);
+	         	USART_Transmit(' ');
+			   _delay_ms(200);				   
+			 }		
+	 }		
+	 for(int i=0;i<8;i++)
+     {
+	    PB_DISP(i);
+		USART_Transmit('B');
+		USART_Transmit(i);
+		USART_Transmit(' ');
+		_delay_ms(500);	
+           for(int k=0;k<50;k++)
+		   {
+		  	 for(int j=0;j<8;j++)
+			 {
+			    SEL(j);
+		   		USART_Transmit('S');
+	         	USART_Transmit(i);
+	         	USART_Transmit(' ');
+			    _delay_ms(2);				   
+			 }
+           }	
+	 }
+		/*if(GC!=2)
 		{
 			seconds=0;
 			if(GC==9)
@@ -35,16 +140,19 @@ int main(void)
 			}
 			else if(GC==0)
 			{
-				minutes=10;
+				minutes=15;
 			}
 			else if(GC==1)
 			{
 				minutes++;
-				if(minutes>10)
+				if(minutes>15)
 				{minutes=0;}
 			}
 			GC=2;
-		}
+				
+		}*/
+		 
+		/* 
          
 		display1(BT);
 				
@@ -53,8 +161,9 @@ int main(void)
 		PORTC = 0b00000000;
 		_delay_us(100);
          
-		display1(BF); 		 
-		scoAdigit(ASH,ARO);
+		display1(BF); 
+		 
+		scoAdigit(ASH,ARO,buzzer);
 		 
 		PORTC = 0b01000000;
 		 _delay_ms(1);
@@ -132,7 +241,7 @@ int main(void)
 			buzzer=0;
 			}
 			
-	 /*	 ASH=1, ARO=1,buzzer=0,BSH=1;
+	 	 ASH=1, ARO=1,buzzer=0,BSH=1;
 	 
 		scoAdigit(ASH,ARO,buzzer);
 		
@@ -178,15 +287,14 @@ ISR(TIMER1_OVF_vect)
 {
 	
   TCNT1=0xBDC; // set initial value to remove time error (16bit counter register)
-  seconds--;
-  /*if(GCSP==0)
+  if(GCSP==0)
   {
     seconds--;
   }
   else 
   {
     buz++;
-  }*/
+  }
 }
 
 ISR(USART_RXC_vect) // @ brd side
@@ -230,19 +338,19 @@ ISR(USART_RXC_vect) // @ brd side
 					   if(AS>99)
 						{
 						  ASH=1;// 1
-						  AS=AS%100;//00
+						  AS-=100;//00
 						}
-					   else
+					   else if(AS<0)
 						{
-							//if(ASH==1)
-							//{
+							if(ASH==1)
+							{
 							  ASH=0;
-							//  AS+=100;//99
-							//}
-							/*else
+							  AS+=100;//99
+							}
+							else
 							{
 							  AS=0;
-							}*/
+							}
 						}
 				  break;
 				    
@@ -261,19 +369,19 @@ ISR(USART_RXC_vect) // @ brd side
 					   	 if(BS>99)
 						 {
 						   BSH=1;  // 1
-						   BS=BS%100;//00
+						   BS-=100;//00
 						 }
-						 else
+						 else if (BS<0)
 						 {
-						   /*if(BSH==1)
-							{*/
+						   if(BSH==1)
+							{
 							 BSH=0;
-							/* BS+=100;//99
+							 BS+=100;//99
 							}
 							else
 							{
 							 BS=0;
-							}*/
+							}
 						 }
 				  break;
 				  
@@ -296,14 +404,6 @@ ISR(USART_RXC_vect) // @ brd side
 				  
 				  case 222: //)
 					   GCSP^=1;
-					   if(GCSP==1)
-						{
-							TIMSK&=~(1<<TOIE1); // Disabled global and timer overflow interrupt;
-						}
-						else
-						{
-							TIMSK|=(1<<TOIE1); // Disabled global and timer overflow interrupt;
-						}
 				  break;
 				  
 				  case 223: //)
@@ -327,8 +427,6 @@ ISR(USART_RXC_vect) // @ brd side
 				  case 156:
 				    NB_Tx(RXC_ISR_DATA[1],RXC_ISR_DATA[2]); // 3 byte packet
 				    break;
-				  default :
-                    NB_Tx(RXC_ISR_DATA[1],RXC_ISR_DATA[2]); // 3 byte packet	
 			   }
 			}
 	  default:	
