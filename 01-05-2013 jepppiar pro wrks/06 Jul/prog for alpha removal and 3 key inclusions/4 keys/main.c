@@ -84,7 +84,7 @@ int main(void)
 		}		
 		else if(menu == 2)  // for displaying teamb name
 		{
-			lcdputs2(16,3,ar8);		
+			lcdputs2(16,3,ar8);	
 			setcolumn(40);
 			setpage(4);
          
@@ -571,19 +571,19 @@ rx_char=UDR0;
 		 
 	     case GC9: 
 		  //minutes-1, seconds=0
-		  USART_Tx128(GC_AD,gcm);   
+		  USART_Tx128(GC_AD,gcm);   // gcm=9
 		    
 		 break;
 		 
 	     case GCR: 
 		  //timer reset;
-		  USART_Tx128(GC_AD,gcrst);
+		  USART_Tx128(GC_AD,gcrst); // gcrst=0
 			   
 		 break;
 		 
 	     case GC1: 
 		 // minutes+1, seconds=0
-		  USART_Tx128(GC_AD,gcp); 
+		  USART_Tx128(GC_AD,gcp); // gcp=1
 			  
 		 break;
 		 
