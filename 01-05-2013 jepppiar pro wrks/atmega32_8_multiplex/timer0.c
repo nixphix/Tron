@@ -14,6 +14,7 @@ int main(void)
 	SYS_INIT();
 	USART_Init(103);
 	USART_Intr();
+	Timer1Init();
 	sei();		   
 
    while(1)							//Infinie loop
@@ -33,7 +34,7 @@ int main(void)
 			else if(GC==1)
 			{
 				minutes++;
-				if(minutes>10)
+				if(minutes>60)
 				{minutes=0;}
 			}
 			GC=2;
@@ -104,11 +105,7 @@ int main(void)
 		_delay_us(100);
 		
 		
-		if(seconds == -1)
-		{
-			seconds = 59;
-			minutes--;
-		}
+
 		
 		if(minutes == -1)
 		{
@@ -137,6 +134,11 @@ ISR(TIMER1_OVF_vect)
 {
   TCNT1=0xBDC; // set initial value to remove time error (16bit counter register)
   seconds--;
+	if(seconds == -1)
+	{
+		seconds = 59;
+		minutes--;
+	}
 }
 
 ISR(USART_RXC_vect) // @ brd side
@@ -144,7 +146,7 @@ ISR(USART_RXC_vect) // @ brd side
 
    RXC_ISR_DATA[RXC_ISR_INDEX]=UDR;
    RXC_ISR_INDEX++;
-  // PORTD ^= 0xff;
+   // PORTD ^= 0xff;
    //_delay_ms(100);
    switch(RXC_ISR_INDEX)
    {

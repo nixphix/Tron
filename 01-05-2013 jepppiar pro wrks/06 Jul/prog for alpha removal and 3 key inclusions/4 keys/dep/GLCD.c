@@ -214,6 +214,23 @@ void lcdputs2(uint8_t y,uint8_t x,uint8_t *str)
 	
 }
 
+void lcdputN(uint8_t y,uint8_t x,uint8_t *str)
+{
+	uint8_t i,strLen=0;
+	unsigned int a;
+	setcolumn(y);
+	setpage(x);
+	strLen = str[9];
+	for(i=0;str[i]!=0x01;i++)
+	{
+		a=(*(str+i)-32);
+		a*=5;
+	lcddata(&font5x7[a],5);
+		lcddata(&z,1);
+	}
+	
+}
+
 void lcdputsdata(uint8_t y,uint8_t x,uint8_t z)
 {
 setcolumn(y);

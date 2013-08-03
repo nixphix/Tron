@@ -20,6 +20,7 @@ void sendNB(void);
 void renderDisp(void)
 {
      clrlcd();
+	 
 	 lcdputs2(46,2,ar3);		//score 
 	 lcdputs2(5,6,ar4);
 	 lcdputs2(110,6,ar4);		//FOUL
@@ -668,7 +669,7 @@ void sendNB(void)
        USART_Tx128(i+100,teama[i]);
 	   i++;
 	 } 
-	 teama[6]=i; //strlen
+	 teama[9]=i; //strlen
      USART_Tx128(106,i);// total no of char
    }
    else if(menu == 3)
@@ -678,7 +679,7 @@ void sendNB(void)
        USART_Tx128(i+150,teamb[i]);
 	   i++;
 	 }  
-	 teamb[6]=i;// strlen
+	 teamb[9]=i;// strlen
      USART_Tx128(156,i);// total no of char
    }
 

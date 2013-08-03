@@ -49,7 +49,7 @@
   
   void Timer1DIS(void) /// disables timer ovf interrupt
   {
-	 TCCR1B |= (0<<CS12)|(0<<CS11)|(0<<CS10); // no clock source
+	 TCCR1B &= ~((1<<CS12)|(1<<CS11)|(1<<CS10)); // no clock source
   }
   
   void Timer0EN(void)
@@ -65,7 +65,7 @@
   void Timer0DIS(void)
   {
      // Prescaler = FCPU/1024
-     TCCR0 |= (0<<CS02)|(0<<CS00);
+     TCCR0 &= ~((1<<CS02)|(1<<CS00));
   }
   
 
