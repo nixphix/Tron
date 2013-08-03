@@ -48,11 +48,8 @@ int main(void)
 
 	USART_Init(103);
 	TIMSK=(1<<TOIE1); // enabled global and timer overflow interrupt;
-	ETIMSK=(1<<TOIE3);
 	TCNT1=0xBDB; // set initial value to remove time error (16bit counter register)
-	TCNT3=0xBDB;
 	TCCR1B = (1<<CS12)|(0<<CS11)|(0<<CS10); // start timer/ set clock
-	TCCR3B = (1<<CS32)|(0<<CS31)|(0<<CS30);
 	DDRA=0x0F;
 	PORTA=0X0F;
 	DDRC=0xFF;
@@ -77,6 +74,7 @@ int main(void)
 		if(menu == 3)
 		{
 		  USART_RxIntEN();
+		  Timer3EN();
           dispclear();
 		  renderDisp();
 		  menu++;
@@ -133,6 +131,7 @@ int main(void)
 				menu=1;			// exit out of the menu and capture the team names
 				_ch=0;
 				USART_RxIntDE();
+				Timer3DIS();
 			}
 			//USART_Transmit(2);
 		}

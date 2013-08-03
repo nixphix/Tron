@@ -1,5 +1,18 @@
 #define START_BYTE 0x53
 
+void Timer3EN(void)
+{
+    ETIMSK = (1<<TOIE3);
+	TCNT3  = 0xBDB;
+	TCCR3B = (1<<CS32)|(0<<CS31)|(0<<CS30);
+}
+
+void Timer3DIS(void)
+{
+    ETIMSK & = ~(1<<TOIE3);
+	TCCR3B & = ~((1<<CS32)|(1<<CS31)|(1<<CS30));
+}
+
 void USART_Init( unsigned int baud )
 {
 		/* Set baud rate */
