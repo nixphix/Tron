@@ -27,6 +27,17 @@ void renderDisp(void)
 	 lcdnumdata(113,7,BF);
 }
 
+void dispclear(void)
+{
+	 clrlcd();
+	 lcdputs2(50,2,ar3);		//score 
+	 lcdputs2(8,6,ar4);
+	 lcdputs2(113,6,ar4);		//FOUL
+	 lcdputs2(55,6,ar6);
+	 lcdputN(14,1,teama);
+	 lcdputN(78,1,teamb);
+}
+
 void t1_rst(void)
 {
 		TCNT1=0xBDB;
@@ -60,17 +71,9 @@ int main(void)
 		
 		if(menu == 3)
 		{
-		 USART_RxIntEN();
-		 clrlcd();
-		 lcdputs2(50,2,ar3);		//score 
-	     lcdputs2(8,6,ar4);
-	     lcdputs2(113,6,ar4);		//FOUL
-	     lcdputs2(55,6,ar6);
-		 lcdputN(14,1,teama);
-		 lcdputN(78,1,teamb);
-		 renderDisp();
-		 
-
+		  USART_RxIntEN();
+          dispClear();
+		  renderDisp();
 		  menu++;
 		}
 		else if(menu == 1)
