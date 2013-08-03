@@ -105,7 +105,7 @@ void lcdchardata(uint8_t __y,uint8_t __x,uint8_t * _z)
 	int _h,_i;
 	for(int k=0;((k<10));k++) 
 	{
-	if(_z[k]!='0')
+	if(_z[k]!=0x01)
 	{
 	_h=((_z[k])-65);
 	_i=((_h *5)+165);
@@ -164,7 +164,7 @@ lcddata(&font5x7[u],5);
 	lcddata(&font5x7[w],5);
 	lcddata(&font5x7[t],5);
 }
-if(__z<99)
+if(__z<100)
 {
 	w=((__z/10)*5)+80;			//9
 	t=((__z%10)*5)+80;			//8

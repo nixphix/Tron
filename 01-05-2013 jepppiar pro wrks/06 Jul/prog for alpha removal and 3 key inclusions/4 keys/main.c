@@ -114,7 +114,6 @@ int main(void)
 			if(menu!=0)
 			{
 				clrlcd();
-				_delay_ms(5);
 			}
 			if(menu>3)
 			{
@@ -626,6 +625,8 @@ rx_char=UDR0;
 		  USART_Tx128(THR_AD,TF_rp);
 		 break;
 	  }
+	 
+	 clrlcd();
 	 lcdnumdata(25,3,AS);
 	 lcdnumdata(85,3,BS);
 	 lcdnumdata(55,7,QT);
