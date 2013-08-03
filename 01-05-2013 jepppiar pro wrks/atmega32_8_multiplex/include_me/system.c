@@ -1,6 +1,15 @@
 #define START_BYTE 0x53
 #define dis1_PORT PORTA   //timer
 #define dis2_PORT PORTB
+ void SYS_INIT(void);
+ void Buzz(uint8_t B);
+ void Timer1Init(void);
+ void Timer0EN(void);
+ void Timer0DIS(void);
+ void Timer1EN(void);
+ void Timer1DIS(void);
+  
+
  void SYS_INIT(void)
   {
 		//MCUCSR |= (1<<JTD);	//This statement will enable PORTC and it should be written twice
@@ -11,16 +20,58 @@
 		DDRA = 0xFF;
    }   
    
-   void scoAdigit(uint8_t one,uint8_t arr)	
-   {
-		/*if(d==1&&e==1&&f==0)			{dis2_PORT = 0b01111000;}
-		else if(d==1,e==0&&f==0)		{dis2_PORT = 0b01100000;}
-		else if(d==0,e==1&&f==0)		{dis2_PORT = 0b00011000;}
-		else if(d==0,e==0&&f==0)		{dis2_PORT = 0b00000000;}
-		else if(d==0,e==0&&f==1)		{dis2_PORT = 0b00000010;}
-		else if(d==1,e==0&&f==1)		{dis2_PORT = 0b11000010;}
-		else if(d==0,e==1&&f==1)		{dis2_PORT = 0b00011010;}
-		else if(d==1,e==1&&f==1)		{dis2_PORT = 0b01111010;}*/
+  void Buzz (uint8_t B)
+  {
+     if(B==1)
+	 {
+	   PORTD |= _BV(PD6);
+	   Timer0EN();
+	 }
+     else
+	 {
+	   PORTD &= ~(_BV(PD6));
+	   Timer0DIS();
+	 }
+  }
+  
+  void Timer1Init(void)
+  {
+    TIMSK|=(1<<TOIE1); // enabled global and timer overflow interrupt;
+	TCNT1=0xBDB; // set initial value to remove time error (16bit counter register)
+	//TCCR1B |= (1<<CS12)|(0<<CS11)|(0<<CS10); // start timer/ set clock
+  }
+  
+  void Timer1EN(void) /// Set init val to t1 and enable timer ovf interrupt
+  {
+  	 TCCR1B |= (1<<CS12)|(0<<CS11)|(0<<CS10); // start timer/ set clock
+	 TCNT1 = 0xBDC; // set initial value to remove time error (16bit counter register)
+  }
+  
+  void Timer1DIS(void) /// disables timer ovf interrupt
+  {
+	 TCCR1B |= (0<<CS12)|(0<<CS11)|(0<<CS10); // no clock source
+  }
+  
+  void Timer0EN(void)
+  {
+     // Prescaler = FCPU/1024
+     TCCR0 |= (1<<CS02)|(1<<CS00);
+     //Enable Overflow Interrupt Enable
+     TIMSK |= (1<<TOIE0);
+     //Initialize Counter
+     TCNT0=0;
+  }
+  
+  void Timer0DIS(void)
+  {
+     // Prescaler = FCPU/1024
+     TCCR0 |= (0<<CS02)|(0<<CS00);
+  }
+  
+
+  
+  void scoAdigit(uint8_t one,uint8_t arr)	
+  {
 		 dis2_PORT = 0x00;//portb
         if(one==1)	
 		 {
@@ -39,9 +90,10 @@
 		 {
 		   dis2_PORT |= 0b00000100; // PB2
 		 }	*/	 
-	}
-	void scoBdigit(uint8_t one,uint8_t arr)	
-   {
+  }
+  
+  void scoBdigit(uint8_t one,uint8_t arr)	
+  {
 		/*if(d==1&&e==0)			{dis2_PORT = 0b01111000;}
 		else if(d==1&e==1)		{dis2_PORT = 0b01100000;}
 		else if(d==0e==0)		{dis2_PORT = 0b00011000;}
@@ -60,9 +112,9 @@
 		   dis2_PORT |= (1<<PB4); // PB3 ,4
 		 }	
 		
-	} 
+  } 
  
-   void display1(uint8_t d)		//Define a function to display the number passed on the seven segment display
+void display1(uint8_t d)		//Define a function to display the number passed on the seven segment display
 {
 	switch(d)			//Open a switch case
 	{

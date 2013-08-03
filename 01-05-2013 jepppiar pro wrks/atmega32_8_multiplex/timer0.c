@@ -1,15 +1,12 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include<util/delay.h>
+#include <util/delay.h>
 #include "include_me/global.c"
 #include "include_me/system.c"
 #include "include_me/tronicman.h"
-#define F_CPU 16000000UL
+#define  F_CPU 16000000UL
 
 volatile int minutes = 10,seconds=0;
-
-
-
 
 int main(void)
 
@@ -17,11 +14,7 @@ int main(void)
 	SYS_INIT();
 	USART_Init(103);
 	USART_Intr();
-	//TIMSK|=(1<<TOIE1); // enabled global and timer overflow interrupt;
-	TCNT1=0xBDB; // set initial value to remove time error (16bit counter register)
-	TCCR1B |= (1<<CS12)|(0<<CS11)|(0<<CS10); // start timer/ set clock
-	sei();		
-   
+	sei();		   
 
    while(1)							//Infinie loop
    {
@@ -112,81 +105,38 @@ int main(void)
 		
 		
 		if(seconds == -1)
-			{
-				seconds = 59;
-				minutes--;
-			}
+		{
+			seconds = 59;
+			minutes--;
+		}
 		
 		if(minutes == -1)
-			{
-				buz=0;
-				minutes = 15;
-				GCSP=1;
-				seconds=0;
-				buzzer=1;
-				
-		    }	
-		if(buz>3)
-			{
-			buz=0;
-			buzzer=0;
-			}
-			
-	 /*	 ASH=1, ARO=1,buzzer=0,BSH=1;
-	 
-		scoAdigit(ASH,ARO,buzzer);
-		
-		PORTC = 0b01000000;
-		 _delay_ms(1500);
-		PORTC = 0b00000000;
-		_delay_us(100);
-		ARO=0;
-		
-	 
-		scoBdigit(BSH,ARO);
-		
-		PORTC = 0b00100000;
-		 _delay_ms(1500);
-		PORTC = 0b00000000;
-		_delay_us(1500);	
-		
-		ASH=1, ARO=1,buzzer=0,BSH=1;
-		
-		scoAdigit(ASH,1,buzzer);
-		
-		PORTC = 0b01000000;
-		 _delay_ms(1500);
-		PORTC = 0b00000000;
-		_delay_us(1500);
-	 
-		
-	 ARO=0;
-		scoBdigit(BSH,0);
-		
-		PORTC = 0b00100000;
-		 _delay_ms(1500);
-		PORTC = 0b00000000;
-		_delay_us(1500);	
-		
-	 */
-	 
+		{
+			//buz=0;
+			Timer1DIS(); //TIMSK&=~(1<<TOIE1); // Disabled global and timer overflow interrupt;
+			minutes = 10;
+			GCSP=1;
+			seconds=0;
+			Buzz(1);
+			//buzzer=1;
+		}		 
 	}
 	return 0;
  }
 
+ISR(TIMER0_OVF_vect) // for buzzer
+{
+  buzCount++;
+  if(buzCount>300) //5s 5*60
+  {
+     Buzz(0);
+  }
+}
+
 ISR(TIMER1_OVF_vect) 
 {
-	
   TCNT1=0xBDC; // set initial value to remove time error (16bit counter register)
   seconds--;
-  /*if(GCSP==0)
-  {
-    seconds--;
-  }
-  else 
-  {
-    buz++;
-  }*/
 }
 
 ISR(USART_RXC_vect) // @ brd side
@@ -199,7 +149,6 @@ ISR(USART_RXC_vect) // @ brd side
    switch(RXC_ISR_INDEX)
    {
       case 1:
-	    
 		 if(RXC_ISR_DATA[0]==START_BYTE)
 		  {    
 		   CHK_SUM=0;   
@@ -210,7 +159,6 @@ ISR(USART_RXC_vect) // @ brd side
 		  }
 		break;
 	  case 2:
-	  
 	       CHK_SUM=(0x0F&RXC_ISR_DATA[1]);
 		break;	
       case 3:
@@ -223,10 +171,10 @@ ISR(USART_RXC_vect) // @ brd side
 			  switch(RXC_ISR_DATA[1])
 			   {
 				  case 200:// #
-					  //display(5);
+					   //display(5);
 				       AS=RXC_ISR_DATA[2];
-					  // if(AS>99){ASH=1;}
-					  // else{ASH=0;}
+					   // if(AS>99){ASH=1;}
+					   // else{ASH=0;}
 					   if(AS>99)
 						{
 						  ASH=1;// 1
@@ -234,15 +182,7 @@ ISR(USART_RXC_vect) // @ brd side
 						}
 					   else
 						{
-							//if(ASH==1)
-							//{
-							  ASH=0;
-							//  AS+=100;//99
-							//}
-							/*else
-							{
-							  AS=0;
-							}*/
+						 ASH=0;
 						}
 				  break;
 				    
@@ -265,15 +205,7 @@ ISR(USART_RXC_vect) // @ brd side
 						 }
 						 else
 						 {
-						   /*if(BSH==1)
-							{*/
-							 BSH=0;
-							/* BS+=100;//99
-							}
-							else
-							{
-							 BS=0;
-							}*/
+						   BSH=0;
 						 }
 				  break;
 				  
@@ -298,11 +230,11 @@ ISR(USART_RXC_vect) // @ brd side
 					   GCSP^=1;
 					   if(GCSP==1)
 						{
-							TIMSK&=~(1<<TOIE1); // Disabled global and timer overflow interrupt;
+						    Timer1DIS();
 						}
 						else
 						{
-							TIMSK|=(1<<TOIE1); // Disabled global and timer overflow interrupt;
+							Timer1EN(); //TIMSK|=(1<<TOIE1); // Enabled global and timer overflow interrupt;
 						}
 				  break;
 				  
@@ -327,6 +259,10 @@ ISR(USART_RXC_vect) // @ brd side
 				  case 156:
 				    NB_Tx(RXC_ISR_DATA[1],RXC_ISR_DATA[2]); // 3 byte packet
 				    break;
+					
+				  case 80:
+                    Buzz(1)	;
+					break;
 				  default :
                     NB_Tx(RXC_ISR_DATA[1],RXC_ISR_DATA[2]); // 3 byte packet	
 			   }

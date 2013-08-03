@@ -82,4 +82,4 @@ volatile uint8_t AS_AD=200,AF_AD=201,AT_AD=202,BS_AD=210,BF_AD=211,BT_AD=212,QT_
 // LED Matrix 
 volatile uint8_t NBA0_AD=100,NBA1_AD=101,NBA2_AD=102,NBA3_AD=103,NBA4_AD=104,NBA5_AD=105,NBB0_AD=150,NBB1_AD=151,NBB2_AD=152,NBB3_AD=153,NBB4_AD=154,NBB5_AD=155;
 
-volatile uint8_t  FO_MAX=5, TO_MAX=5, QT_MAX=5, buzzer=0, buz=0;
+volatile uint8_t  FO_MAX=5, TO_MAX=5, QT_MAX=5, buzzer=0, buzCount=0;

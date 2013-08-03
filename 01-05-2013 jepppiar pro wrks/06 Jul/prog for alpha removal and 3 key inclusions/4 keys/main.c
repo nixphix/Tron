@@ -17,6 +17,21 @@ static uint8_t indexA=0,indexB=0;
 volatile unsigned int rx_char=0;
 void sendNB(void);
 
+void renderDisp(void)
+{
+     clrlcd();
+	 lcdputs2(46,2,ar3);		//score 
+	 lcdputs2(5,6,ar4);
+	 lcdputs2(110,6,ar4);		//FOUL
+	 lcdputs2(58,6,ar6);
+	 
+	 lcdnumdata(25,3,AS);
+	 lcdnumdata(85,3,BS);
+	 lcdnumdata(55,7,QT);
+	 lcdnumdata(5,7,AF);
+	 lcdnumdata(110,7,BF);
+}
+
 void t1_rst(void)
 {
 		TCNT1=0xBDB;
@@ -51,7 +66,7 @@ int main(void)
 		if(menu == 3)
 		{
 		 USART_RxIntEN();
-		 lcdputs2(46,2,ar3);		//score 
+	/*	 lcdputs2(46,2,ar3);		//score 
 	     lcdputs2(5,6,ar4);
 	     lcdputs2(110,6,ar4);		//FOUL
 	     lcdputs2(58,6,ar6);
@@ -60,7 +75,7 @@ int main(void)
 	     lcdnumdata(85,3,BS);
 	     lcdnumdata(55,7,QT);
 	     lcdnumdata(5,7,AF);
-	     lcdnumdata(110,7,BF);
+	     lcdnumdata(110,7,BF);*/ // moved to renderImg()
 		  menu++;
 		}
 		else if(menu == 1)
@@ -123,30 +138,39 @@ int main(void)
 			}
 			//USART_Transmit(2);
 		}
-		else if((_av == 0)&(menu == 1)) // buzzer USART_Transmit(0);
+		else if(_av == 0) // buzzer USART_Transmit(0);
 		{
-			if(indexA>=0)
+		    if(menu == 3)
 			{
-				indexA--;
-				if(indexA<0)
-				{
-					indexA=0;
-				}
-				teama[indexA]=0x01;
+			   USART_Tx128(BUZ_AD,1);
 			}
-		}	
-		else if((_av == 0)&(menu == 2))	// buzzer USART_Transmit(0);
-		{
-			if(indexB>=0)
+			else if(menu == 1)
 			{
-				indexB--;
-				if(indexB<0)
+				if(indexA>=0)
 				{
-					indexB=0;
+					indexA--;
+					if(indexA<0)
+					{
+						indexA=0;
+					}
+					teama[indexA]=0x01;
 				}
-				teamb[indexB]=0x01;
 			}
+            else if(menu == 2)	
+			{
+				
+				if(indexB>=0)
+				{
+					indexB--;
+					if(indexB<0)
+					{
+						indexB=0;
+					}
+					teamb[indexB]=0x01;
+				}
+			}	
 		}	
+	
 		else if((_av==1) & (menu == 1))   // A-Z
 		{
 			if(o_sec==1)
@@ -625,13 +649,13 @@ rx_char=UDR0;
 		  USART_Tx128(THR_AD,TF_rp);
 		 break;
 	  }
-	 
-	 clrlcd();
+	 renderDisp();
+	 /*clrlcd();
 	 lcdnumdata(25,3,AS);
 	 lcdnumdata(85,3,BS);
 	 lcdnumdata(55,7,QT);
 	 lcdnumdata(5,7,AF);
-	 lcdnumdata(110,7,BF);
+	 lcdnumdata(110,7,BF);*/ // moved to renderImg()
  }
 
 void sendNB(void)
@@ -644,6 +668,7 @@ void sendNB(void)
        USART_Tx128(i+100,teama[i]);
 	   i++;
 	 } 
+	 teama[6]=i; //strlen
      USART_Tx128(106,i);// total no of char
    }
    else if(menu == 3)
@@ -653,6 +678,7 @@ void sendNB(void)
        USART_Tx128(i+150,teamb[i]);
 	   i++;
 	 }  
+	 teamb[6]=i;// strlen
      USART_Tx128(156,i);// total no of char
    }
 
