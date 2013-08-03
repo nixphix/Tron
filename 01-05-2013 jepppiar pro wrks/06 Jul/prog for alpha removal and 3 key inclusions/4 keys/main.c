@@ -2,12 +2,12 @@
 #include<util/delay.h>
 #include<avr/interrupt.h>
 #include<inttypes.h>
-#include<Dep/global.c> //bug free code
-#include<main.h>
-#include<GLCD.c>
-#include<at128_USART.c>
-#include<sportronix.h>
 #include<string.h>
+#include "dep/global.c" //bug free code
+#include "dep/main.h"
+#include "dep/GLCD.c"
+#include "dep/at128_USART.c"
+#include "dep/sportronix.h"
 
 #define F_CPU 16000000UL
 
