@@ -27,7 +27,7 @@ void lcd_bs(uint8_t ___y);
 
 
 
-uint8_t c,z=0;
+uint8_t c,z=0,ASH_U=0,BSH_U=0,ASH_D=0,BSH_D=0;
 uint8_t ar0[]="SCORE MATE";
 uint8_t ar1[]="TEAM A";
 uint8_t ar2[]="TEAM B";                 

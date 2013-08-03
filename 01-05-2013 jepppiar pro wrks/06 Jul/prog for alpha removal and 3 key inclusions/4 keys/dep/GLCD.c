@@ -170,7 +170,7 @@ if(__z<100)
 	t=((__z%10)*5)+80;			//8
 	setcolumn(__y);
 	setpage(__x);
-	if(w!=0)
+	if(w!=80)
 	{
 	  lcddata(&font5x7[w],5);
 	  lcddata(&z,1);

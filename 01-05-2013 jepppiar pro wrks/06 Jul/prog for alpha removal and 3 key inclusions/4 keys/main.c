@@ -21,11 +21,11 @@ void renderDisp(void)
 {
      //clrlcd();
 	 
-	 lcdnumdata(25,3,AS);
-	 lcdnumdata(85,3,BS);
-	 lcdnumdata(55,7,QT);
-	 lcdnumdata(5,7,AF);
-	 lcdnumdata(110,7,BF);
+	 lcdnumdata(26,3,AS);
+	 lcdnumdata(90,3,BS);
+	 lcdnumdata(62,7,QT);
+	 lcdnumdata(8,7,AF);
+	 lcdnumdata(113,7,BF);	 
 }
 
 void t1_rst(void)
@@ -63,12 +63,12 @@ int main(void)
 		{
 		 USART_RxIntEN();
 		 clrlcd();
-		 lcdputs2(46,2,ar3);		//score 
-	     lcdputs2(5,6,ar4);
-	     lcdputs2(110,6,ar4);		//FOUL
-	     lcdputs2(58,6,ar6);
-		 lcdputN(14,1,teama)
-		 lcdputN(78,1,teamb)
+		 lcdputs2(50,2,ar3);		//score 
+	     lcdputs2(8,6,ar4);
+	     lcdputs2(113,6,ar4);		//FOUL
+	     lcdputs2(55,6,ar6);
+		 lcdputN(14,1,teama);
+		 lcdputN(78,1,teamb);
 		 renderDisp();
 		 
 	/*	 lcdputs2(46,2,ar3);		//score 
@@ -447,10 +447,7 @@ rx_char=UDR0;
 		  if(AS<199)
 		  {AS++;}
 		  else
-		  {
-		    AS=0;
-			clrlcd();
-		  }
+		  {AS=0;}
 		  USART_Tx128(AS_AD,AS);
 		  
 		 break;
@@ -532,10 +529,7 @@ rx_char=UDR0;
 		  if(BS<199)
 		  {BS++;}
 		  else
-		  {
-		   BS=0;
-		   clrlcd();
-		  }
+		  {BS=0;}
 		  USART_Tx128(BS_AD,BS); 
 	     
 		 
