@@ -26,13 +26,6 @@ void renderDisp(void)
 	 lcdnumdata(55,7,QT);
 	 lcdnumdata(5,7,AF);
 	 lcdnumdata(110,7,BF);
-	 
-	 lcdputs2(46,2,ar3);		//score 
-	 lcdputs2(5,6,ar4);
-	 lcdputs2(110,6,ar4);		//FOUL
-	 lcdputs2(58,6,ar6);
-	 
-
 }
 
 void t1_rst(void)
@@ -70,7 +63,14 @@ int main(void)
 		{
 		 USART_RxIntEN();
 		 clrlcd();
+		 lcdputs2(46,2,ar3);		//score 
+	     lcdputs2(5,6,ar4);
+	     lcdputs2(110,6,ar4);		//FOUL
+	     lcdputs2(58,6,ar6);
+		 lcdputN(14,1,teama)
+		 lcdputN(78,1,teamb)
 		 renderDisp();
+		 
 	/*	 lcdputs2(46,2,ar3);		//score 
 	     lcdputs2(5,6,ar4);
 	     lcdputs2(110,6,ar4);		//FOUL

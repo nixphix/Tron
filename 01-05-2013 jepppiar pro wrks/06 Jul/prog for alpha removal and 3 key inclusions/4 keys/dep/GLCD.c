@@ -160,7 +160,7 @@ if(__z>99) 				// 198
 	t=((v%10)*5)+80;			//8
 	setcolumn(__y);
 	setpage(__x);	
-lcddata(&font5x7[u],5);
+    lcddata(&font5x7[u],5);
 	lcddata(&font5x7[w],5);
 	lcddata(&font5x7[t],5);
 }
@@ -170,8 +170,11 @@ if(__z<100)
 	t=((__z%10)*5)+80;			//8
 	setcolumn(__y);
 	setpage(__x);
-	lcddata(&font5x7[w],5);
-	lcddata(&z,1);
+	if(w!=0)
+	{
+	  lcddata(&font5x7[w],5);
+	  lcddata(&z,1);
+	}
 	lcddata(&font5x7[t],5);
 	lcddata(&z,1);
 	
@@ -208,7 +211,7 @@ void lcdputs2(uint8_t y,uint8_t x,uint8_t *str)
 	{
 		a=(*(str+i)-32);
 		a*=5;
-	lcddata(&font5x7[a],5);
+     	lcddata(&font5x7[a],5);
 		lcddata(&z,1);
 	}
 	
@@ -216,16 +219,19 @@ void lcdputs2(uint8_t y,uint8_t x,uint8_t *str)
 
 void lcdputN(uint8_t y,uint8_t x,uint8_t *str)
 {
-	uint8_t i,strLen=0;
+	uint8_t i,strLen = ((6-str[9])/2)*6;
 	unsigned int a;
 	setcolumn(y);
 	setpage(x);
-	strLen = str[9];
+	for(i=0;i<strLen;i++)
+	{
+	    lcddata(&z,1);
+	}
 	for(i=0;str[i]!=0x01;i++)
 	{
 		a=(*(str+i)-32);
 		a*=5;
-	lcddata(&font5x7[a],5);
+	    lcddata(&font5x7[a],5);
 		lcddata(&z,1);
 	}
 	
