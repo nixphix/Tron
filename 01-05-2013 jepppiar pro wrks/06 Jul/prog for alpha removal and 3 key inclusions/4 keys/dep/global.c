@@ -87,4 +87,4 @@ volatile uint8_t BUZ_AD = 80;
 volatile uint8_t  FO_MAX=5, TO_MAX=5, QT_MAX=5, buzzer=0, buz=0, TF_rv=0, TF_sp=1, TF_rp=2, TF_tr=3;
 
 //Shot clock clocked by at128
-volatile uint8_t seconds=24, TF_RST=1,SHC_AD=75;
+volatile int8_t seconds=24, TF_RST=1,SHC_AD=75,waitTime=5;

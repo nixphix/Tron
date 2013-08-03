@@ -6,13 +6,12 @@
 #include "dep/global.c" //bug free code
 #include "dep/main.h"
 #include "dep/GLCD.c"
-#include "dep/at128_USART.c"
+#include "dep/functions.c"
 #include "dep/sportronix.h"
 
 #define F_CPU 16000000UL
 
 uint8_t keypad_4keys(void);
-
 static uint8_t indexA=0,indexB=0;
 volatile unsigned int rx_char=0;
 void sendNB(void);
@@ -60,7 +59,8 @@ int main(void)
 	PORTC=0xFF;
 	DDRB=0x00;
 	DDRD=0xFF;
-	
+	GCSP=1;
+
 	GLCD_Init128();	
 	picture(&sportronix[0]);
 	sei();
@@ -351,29 +351,34 @@ int main(void)
 ISR(TIMER1_OVF_vect) 
 {
 	
-  TCNT1=0xBDC; // set initial value to remove time error (16bit counter register)
-  //PORTD^=0xFF; // Here braodcast the 1 sec pulse to the slave boards.
   o_sec=1;
-  
+  TCNT1=0xBDC; // set initial value to remove time error (16bit counter register)  
 }
 
 ISR(TIMER3_OVF_vect) 
 {
 	
-  TCNT3=0xBDC; // set initial value to remove time error (16bit counter register)
-  if(TF_RST==0)
+   // set initial value to remove time error (16bit counter register)
+  if(GCSP==0)
   {
-   seconds--;
+    seconds--;
+  }
+  else if(--waitTime==0)
+  {
+      seconds=24;
   }
   
   if(seconds==-1)
   {
-    TF_RST=1;
-    seconds=24;
+    GCSP=1;
+    seconds=0;
+	waitTime=5;
+	// ring the buzzer
     //transmit usat(TF_AD,seconds)
   }
   
   USART_Tx128(SHC_AD,seconds);
+  TCNT3=0xBDC;
 }
 
 	
@@ -625,21 +630,24 @@ rx_char=UDR0;
 		  //minutes-1, seconds=0
 		  USART_Tx128(GC_AD,gcm);   // gcm=9
 		  seconds=24;
-		  TF_RST=1;		    
+		  TCNT3=0xBDC;
+		  GCSP=1;		    
 		 break;
 		 
 	     case GCR: 
 		  //timer reset;
 		  USART_Tx128(GC_AD,gcrst); // gcrst=0
 		  seconds=24;
-		  TF_RST=1;	
+		  TCNT3=0xBDC;
+		  GCSP=1;	
  		 break;
 		 
 	     case GC1: 
 		 // minutes+1, seconds=0
 		  USART_Tx128(GC_AD,gcp); // gcp=1
 		  seconds=24;
-		  TF_RST=1;			  
+		  TCNT3=0xBDC;
+		  GCSP=1;			  
 		 break;
 		 
 	     case GSP:  // actually it is arrow
@@ -652,7 +660,6 @@ rx_char=UDR0;
 		  
 		  USART_Tx128(GCSP_AD,0); 
 		  GCSP^=1;
-		  TF_RST=GCSP;
 		  
 		 break;
 		 
@@ -660,14 +667,7 @@ rx_char=UDR0;
 		  
 		   USART_Tx128(TFR_AD,TF_rp); 
            seconds=24;
-           if(GCSP==1) 
-		   {
-		     TF_RST=1;
-		   }
-		   else
-		   {
-		     TF_RST=0;
-		   }
+		   TCNT3=0xBDC;
 		 break;
 		 
 	     case BPT:  // 14s reset
@@ -676,15 +676,8 @@ rx_char=UDR0;
 		  if(seconds<14)
 		  {
            seconds=14;
-           if(GCSP==1) 
-		   {
-		     TF_RST=1;
-		   }
-		   else
-		   {
-		     TF_RST=0;
-		   }
 		  }
+		  TCNT3=0xBDC;
 		 break;
 	  }
 	 renderDisp();
