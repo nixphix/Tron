@@ -19,18 +19,20 @@ void sendNB(void);
 
 void renderDisp(void)
 {
-     clrlcd();
-	 
-	 lcdputs2(46,2,ar3);		//score 
-	 lcdputs2(5,6,ar4);
-	 lcdputs2(110,6,ar4);		//FOUL
-	 lcdputs2(58,6,ar6);
+     //clrlcd();
 	 
 	 lcdnumdata(25,3,AS);
 	 lcdnumdata(85,3,BS);
 	 lcdnumdata(55,7,QT);
 	 lcdnumdata(5,7,AF);
 	 lcdnumdata(110,7,BF);
+	 
+	 lcdputs2(46,2,ar3);		//score 
+	 lcdputs2(5,6,ar4);
+	 lcdputs2(110,6,ar4);		//FOUL
+	 lcdputs2(58,6,ar6);
+	 
+
 }
 
 void t1_rst(void)
@@ -67,6 +69,8 @@ int main(void)
 		if(menu == 3)
 		{
 		 USART_RxIntEN();
+		 clrlcd();
+		 renderDisp();
 	/*	 lcdputs2(46,2,ar3);		//score 
 	     lcdputs2(5,6,ar4);
 	     lcdputs2(110,6,ar4);		//FOUL
@@ -171,8 +175,7 @@ int main(void)
 				}
 			}	
 		}	
-	
-		else if((_av==1) & (menu == 1))   // A-Z
+		else if((_av==1)&(menu == 1))   // A-Z
 		{
 			if(o_sec==1)
 			{
@@ -444,7 +447,10 @@ rx_char=UDR0;
 		  if(AS<199)
 		  {AS++;}
 		  else
-		  {AS=0;}
+		  {
+		    AS=0;
+			clrlcd();
+		  }
 		  USART_Tx128(AS_AD,AS);
 		  
 		 break;
@@ -526,7 +532,10 @@ rx_char=UDR0;
 		  if(BS<199)
 		  {BS++;}
 		  else
-		  {BS=0;}
+		  {
+		   BS=0;
+		   clrlcd();
+		  }
 		  USART_Tx128(BS_AD,BS); 
 	     
 		 
