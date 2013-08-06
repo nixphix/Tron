@@ -15,6 +15,27 @@ uint8_t keypad_4keys(void);
 static uint8_t indexA=0,indexB=0;
 volatile unsigned int rx_char=0;
 void sendNB(void);
+void lcdBallPoss(int aro_tog)
+{
+    if(aro_tog==1) 
+	{
+	  setcolumn(83);
+      setpage(2);
+	  lcddata(&font5x7[0],5);
+	  setcolumn(41);
+      setpage(2);
+	  lcddata(&font5x7[470],5);
+	}
+	else 
+	{
+	  setcolumn(41);
+      setpage(2);
+	  lcddata(&font5x7[0],5);
+	  setcolumn(83);
+      setpage(2);
+	  lcddata(&font5x7[475],5);
+    }	
+}
 
 void renderDisp(void)
 {
@@ -24,6 +45,7 @@ void renderDisp(void)
 	 lcdnumdata(61,7,QT);
 	 lcdnumdata(8,7,AF);
 	 lcdnumdata(113,7,BF);
+	 lcdBallPoss(ARO);
 }
 
 void dispclear(void)
@@ -33,8 +55,8 @@ void dispclear(void)
 	 lcdputs2(8,6,ar4);
 	 lcdputs2(113,6,ar4);		//FOUL
 	 lcdputs2(55,6,ar6);
-	 lcdputN(14,1,teama);
-	 lcdputN(78,1,teamb);
+	 lcdputN(0,0,teama);
+	 lcdputN(64,0,teamb);
 }
 
 void t1_rst(void)
@@ -357,7 +379,7 @@ ISR(TIMER1_OVF_vect)
 ISR(TIMER3_OVF_vect) 
 {
 	
-   // set initial value to remove time error (16bit counter register)
+  USART_Tx128(SHC_AD,seconds);
   if(GCSP==0)
   {
     seconds--;
@@ -375,8 +397,7 @@ ISR(TIMER3_OVF_vect)
 	// ring the buzzer
     //transmit usat(TF_AD,seconds)
   }
-  
-  USART_Tx128(SHC_AD,seconds);
+  // set initial value to remove time error (16bit counter register)
   TCNT3=0xBDC;
 }
 
@@ -629,7 +650,7 @@ rx_char=UDR0;
 		  //minutes-1, seconds=0
 		  USART_Tx128(GC_AD,gcm);   // gcm=9
 		  seconds=24;
-		  TCNT3=0xBDC;
+		  TCNT3=0xFFFE;// force timer overflow
 		  GCSP=1;		    
 		 break;
 		 
@@ -637,7 +658,7 @@ rx_char=UDR0;
 		  //timer reset;
 		  USART_Tx128(GC_AD,gcrst); // gcrst=0
 		  seconds=24;
-		  TCNT3=0xBDC;
+		  TCNT3=0xFFFE;// force timer overflow
 		  GCSP=1;	
  		 break;
 		 
@@ -645,13 +666,14 @@ rx_char=UDR0;
 		 // minutes+1, seconds=0
 		  USART_Tx128(GC_AD,gcp); // gcp=1
 		  seconds=24;
-		  TCNT3=0xBDC;
+		  TCNT3=0xFFFE;// force timer overflow
 		  GCSP=1;			  
 		 break;
 		 
 	     case GSP:  // actually it is arrow
 		  
 		  ARO^=1;
+		  lcdBallPoss(ARO);
 		  USART_Tx128(ARO_AD,ARO);   
 		 break;
 		 
@@ -666,8 +688,8 @@ rx_char=UDR0;
 		  
 		   USART_Tx128(TFR_AD,TF_rp); 
            seconds=24;
-		   TCNT3=0xBDC;
-		 break;
+		   TCNT3=0xFFFE;// force timer overflow
+ 		 break;
 		 
 	     case BPT:  // 14s reset
 		   
@@ -675,8 +697,8 @@ rx_char=UDR0;
 		  if(seconds<14)
 		  {
            seconds=14;
+		   TCNT3=0xFFFE;// force timer overflow
 		  }
-		  TCNT3=0xBDC;
 		 break;
 	  }
 	 renderDisp();

@@ -9,8 +9,8 @@ void Timer3EN(void)
 
 void Timer3DIS(void)
 {
-    ETIMSK & = ~(1<<TOIE3);
-	TCCR3B & = ~((1<<CS32)|(1<<CS31)|(1<<CS30));
+    ETIMSK &= ~(1<<TOIE3);
+	TCCR3B &= ~((1<<CS32)|(1<<CS31)|(1<<CS30));
 }
 
 void USART_Init( unsigned int baud )

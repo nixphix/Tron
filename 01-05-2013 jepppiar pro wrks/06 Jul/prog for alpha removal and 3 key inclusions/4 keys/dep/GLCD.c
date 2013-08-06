@@ -206,7 +206,15 @@ if(__z<100)
 	setpage(__x);
 	if(w!=80)
 	{
+	  lcddata(&z,1);
+	  lcddata(&z,1);
+	  lcddata(&z,1);
 	  lcddata(&font5x7[w],5);
+	  lcddata(&z,1);
+	  lcddata(&font5x7[t],5);
+	  lcddata(&z,1);
+	  lcddata(&z,1);
+	  lcddata(&z,1);
 	  lcddata(&z,1);
 	}
 	else
@@ -217,15 +225,15 @@ if(__z<100)
 	  lcddata(&z,1);
 	  lcddata(&z,1);
 	  lcddata(&z,1);
+	  lcddata(&font5x7[t],5);
+	  lcddata(&z,1);
+	  lcddata(&z,1);
+	  lcddata(&z,1);
+	  lcddata(&z,1);
+	  lcddata(&z,1);
+	  lcddata(&z,1);
+	  lcddata(&z,1);
 	}
-	lcddata(&font5x7[t],5);
-	lcddata(&z,1);
-	lcddata(&z,1);//clear 3rd digit
-	lcddata(&z,1);
-	lcddata(&z,1);
-	lcddata(&z,1);
-	lcddata(&z,1);
-	lcddata(&z,1);
 	
 }
 }
@@ -268,7 +276,7 @@ void lcdputs2(uint8_t y,uint8_t x,uint8_t *str)
 
 void lcdputN(uint8_t y,uint8_t x,uint8_t *str)
 {
-	uint8_t i,strLen = ((6-str[9])/2)*6;
+	uint8_t i,strLen = (64-(str[9]*6))/2;
 	unsigned int a;
 	setcolumn(y);
 	setpage(x);
