@@ -2,7 +2,7 @@
 #define dis1_PORT PORTA   //timer
 #define dis2_PORT PORTB
  void SYS_INIT(void);
- void Buzz(void);
+ void Buzz(int t);
  void Timer1Init(void);
  void Timer0EN(void);
  void Timer0DIS(void);
@@ -20,11 +20,11 @@
 		DDRA = 0xFF;
    }   
    
-  void Buzz (void)
+  void Buzz (int t)
   {
 	   PORTD |= _BV(PD6);
 	   Timer0EN();
-	   buzCount=0;
+	   buzCount=(4-t)*61;
   }
   
   void Timer1Init(void)
@@ -36,8 +36,8 @@
   
   void Timer1EN(void) /// Set init val to t1 and enable timer ovf interrupt
   {
-  	 TCCR1B |= (1<<CS12)|(0<<CS11)|(0<<CS10); // start timer/ set clock
 	 TCNT1 = 0xBDC; // set initial value to remove time error (16bit counter register)
+	 TCCR1B |= (1<<CS12)|(0<<CS11)|(0<<CS10); // start timer/ set clock
   }
   
   void Timer1DIS(void) /// disables timer ovf interrupt
@@ -167,6 +167,10 @@ void display1(uint8_t d)		//Define a function to display the number passed on th
 		case 0: 
 		
 		dis1_PORT = 0b01111110;
+		break;
+		
+		case 10:
+		dis1_PORT = 0b01001111;// E for extra time 
 		
 	}
 

@@ -15,6 +15,11 @@ uint8_t keypad_4keys(void);
 static uint8_t indexA=0,indexB=0;
 volatile unsigned int rx_char=0;
 void sendNB(void);
+void GCDP_Tx(int state)
+{
+  GCSP=state;
+  USART_Tx128(GCSP_AD,state);   
+}
 void lcdBallPoss(int aro_tog)
 {
     if(aro_tog==1) 
@@ -78,7 +83,8 @@ int main(void)
 	PORTC=0xFF;
 	DDRB=0x00;
 	DDRD=0xFF;
-	GCSP=1;
+	//GCSP=1;
+	GCDP_Tx(1);
 
 	GLCD_Init128();	
 	picture(&sportronix[0]);
@@ -161,7 +167,7 @@ int main(void)
 		{
 		    if(menu == 3)
 			{
-			   USART_Tx128(BUZ_AD,1);
+			   USART_Tx128(BUZ_AD,(int)2); //2s
 			}
 			else if(menu == 1)
 			{
@@ -379,21 +385,28 @@ ISR(TIMER1_OVF_vect)
 ISR(TIMER3_OVF_vect) 
 {
 	
-  USART_Tx128(SHC_AD,seconds);
   if(GCSP==0)
   {
+    USART_Tx128(SHC_AD,seconds);
     seconds--;
   }
-  else if(--waitTime==0)
+  else if(seconds==0)
   {
-      seconds=24;
+  	USART_Tx128(SHC_AD,seconds);
+    USART_Tx128(BUZ_AD,2); //2s
+    seconds=24;
+  }
+  else if((seconds==24)|(seconds==14))
+  {
+    USART_Tx128(SHC_AD,seconds);
   }
   
   if(seconds==-1)
   {
-    GCSP=1;
+    // GCSP=1;
+	GCDP_Tx(1);
     seconds=0;
-	waitTime=5;
+	//waitTime=2;
 	// ring the buzzer
     //transmit usat(TF_AD,seconds)
   }
@@ -651,6 +664,7 @@ rx_char=UDR0;
 		  USART_Tx128(GC_AD,gcm);   // gcm=9
 		  seconds=24;
 		  TCNT3=0xFFFE;// force timer overflow
+		  //GCDP_Tx(1);
 		  GCSP=1;		    
 		 break;
 		 
@@ -659,7 +673,8 @@ rx_char=UDR0;
 		  USART_Tx128(GC_AD,gcrst); // gcrst=0
 		  seconds=24;
 		  TCNT3=0xFFFE;// force timer overflow
-		  GCSP=1;	
+		  //GCDP_Tx(1);
+		   GCSP=1;	
  		 break;
 		 
 	     case GC1: 
@@ -667,6 +682,7 @@ rx_char=UDR0;
 		  USART_Tx128(GC_AD,gcp); // gcp=1
 		  seconds=24;
 		  TCNT3=0xFFFE;// force timer overflow
+		  //GCDP_Tx(1);
 		  GCSP=1;			  
 		 break;
 		 
@@ -678,9 +694,9 @@ rx_char=UDR0;
 		 break;
 		 
 	     case R24: // actually it is gsp
-		  
-		  USART_Tx128(GCSP_AD,0); 
+		  //USART_Tx128(GCSP_AD,0); 
 		  GCSP^=1;
+		  GCDP_Tx(GCSP);
 		  
 		 break;
 		 
@@ -698,6 +714,7 @@ rx_char=UDR0;
 		  {
            seconds=14;
 		   TCNT3=0xFFFE;// force timer overflow
+		   GCDP_Tx(1);		   
 		  }
 		 break;
 	  }

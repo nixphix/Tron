@@ -118,8 +118,11 @@ int main(void)
 			minutes = 10;
 			GCSP=1;
 			seconds=0;
-			Buzz();
-			//buzzer=1;
+			if(GC_SET!=1)
+			 {
+			  Buzz(4);
+			  //buzzer=1;
+			 }
 		}		
  
 	}
@@ -129,7 +132,7 @@ int main(void)
 ISR(TIMER0_OVF_vect) // for buzzer
 {
   buzCount++;
-  if(buzCount>300) //5s 5*60
+  if(buzCount>244) //4s 4*61
   {
 	 PORTD &= ~(_BV(PD6));
 	 Timer0DIS();
@@ -228,6 +231,8 @@ ISR(USART_RXC_vect) // @ brd side
 				  
 				  case 220: //)
 					   QT=RXC_ISR_DATA[2];
+					   if(QT>4)
+					   {QT=10;}
 				  break;
 				  
 				  case 221: //)
@@ -236,7 +241,9 @@ ISR(USART_RXC_vect) // @ brd side
 				  break;
 				  
 				  case 222: //)
-					   GCSP^=1;
+				  
+					   GCSP=RXC_ISR_DATA[2];
+					   GC_SET=0;
 					   if(GCSP==1)
 						{
 						    Timer1DIS();
@@ -249,6 +256,7 @@ ISR(USART_RXC_vect) // @ brd side
 				  
 				  case 223: //)
 					   GC=RXC_ISR_DATA[2];
+					   GC_SET=1;
 					   GCSP=1;
 				  break;
 				  
@@ -270,7 +278,7 @@ ISR(USART_RXC_vect) // @ brd side
 				    break;
 					
 				  case 80:
-                    Buzz()	;
+                    Buzz(RXC_ISR_DATA[2]);
 					break;
 				  default :
                     NB_Tx(RXC_ISR_DATA[1],RXC_ISR_DATA[2]); // 3 byte packet	
