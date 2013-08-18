@@ -12,7 +12,7 @@
 #define F_CPU 16000000UL
 
 uint8_t keypad_4keys(void);
-static uint8_t indexA=0,indexB=0;
+static int8_t indexA=0,indexB=0;
 volatile unsigned int rx_char=0;
 void sendNB(void);
 void GCDP_Tx(int state)
@@ -72,29 +72,27 @@ void t1_rst(void)
 	
 int main(void)
 {
-
-	USART_Init(103);
-	TIMSK=(1<<TOIE1); // enabled global and timer overflow interrupt;
-	TCNT1=0xBDB; // set initial value to remove time error (16bit counter register)
-	TCCR1B = (1<<CS12)|(0<<CS11)|(0<<CS10); // start timer/ set clock
+	
 	DDRA=0x0F;
 	PORTA=0X0F;
 	DDRC=0xFF;
 	PORTC=0xFF;
 	DDRB=0x00;
 	DDRD=0xFF;
+    GLCD_Init128();	
+	USART_Init(103);
+	TIMSK=(1<<TOIE1); // enabled global and timer overflow interrupt;
+	TCNT1=0xBDB; // set initial value to remove time error (16bit counter register)
+	TCCR1B = (1<<CS12)|(0<<CS11)|(0<<CS10); // start timer/ set clock
 	//GCSP=1;
 	GCDP_Tx(1);
 
-	GLCD_Init128();	
 	picture(&sportronix[0]);
 	sei();
 	
 	
 	while(1)
 	{
-	
-
 		_av=keypad_4keys();
 		
 		// get into this loop only when the home button is pressed, also clear the existing team names since there s no option for backspace		
@@ -110,9 +108,11 @@ int main(void)
 		else if(menu == 1)
 		{
 			// for displaying teama name
-			lcdputs2(16,3,ar7);		
+			lcdputs2(16,1,ar7);	
+			lcdputs2(16,7,ar9);	
+            	
 			setcolumn(40);
-			setpage(4);
+			setpage(2);
 			 
 			for(int k=0;((k<6));k++)
 			{
@@ -128,9 +128,11 @@ int main(void)
 		}		
 		else if(menu == 2)  // for displaying teamb name
 		{
-			lcdputs2(16,3,ar8);	
+			lcdputs2(16,1,ar8);	
+			lcdputs2(16,7,ar9);	
+			
 			setcolumn(40);
-			setpage(4);
+			setpage(2);
          
 			for(int k=0;((k<6));k++)	//&(teamb[k]!=0x01)
 			{
@@ -163,11 +165,11 @@ int main(void)
 			}
 			//USART_Transmit(2);
 		}
-		else if(_av == 0) // buzzer USART_Transmit(0);
+		else if(_av == 0)                    // buzzer
 		{
-		    if(menu == 3)
+		    if(menu > 2)
 			{
-			   USART_Tx128(BUZ_AD,(int)2); //2s
+			   USART_Tx128(BUZ_AD,2); //2s
 			}
 			else if(menu == 1)
 			{
@@ -392,11 +394,10 @@ ISR(TIMER3_OVF_vect)
   }
   else if(seconds==0)
   {
-  	USART_Tx128(SHC_AD,seconds);
-    USART_Tx128(BUZ_AD,2); //2s
     seconds=24;
+	USART_Tx128(SHC_AD,seconds);
   }
-  else if((seconds==24)|(seconds==14))
+  else if(seconds==14)
   {
     USART_Tx128(SHC_AD,seconds);
   }
@@ -406,6 +407,9 @@ ISR(TIMER3_OVF_vect)
     // GCSP=1;
 	GCDP_Tx(1);
     seconds=0;
+	USART_Tx128(SHC_AD,seconds);
+	_delay_us(5);
+	USART_Tx128(BUZ_AD,2); //2s
 	//waitTime=2;
 	// ring the buzzer
     //transmit usat(TF_AD,seconds)
@@ -443,20 +447,18 @@ uint8_t check_key_4keys(void)
 uint8_t keypad_4keys(void)
 {
 		//PORTA=0x00;
-	    PORTC = 0x00;//&=~(1<<PC7);
+	    PORTC = 0x00;  //&=~(1<<PC7);
 		
-		PORTB=0xFF;		//set all the input to one
+		PORTB = 0xFF;  //set all the input to one
 		
-		_nkey_=check_key_4keys();
+		_nkey_=check_key_4keys();		
 		
+		//if(_nkey_ == d_nkey) { USART_Transmit(9); }
 		
-		
-		if(_nkey_ == d_nkey) { USART_Transmit(9); }
-		
-		if (_nkey_ == 0xFF) { _nkey_ = 98, _okey_ = 99;} // this differntiates btw a key gap , sends oxff when a key is nt pressed
+		if(_nkey_ == 0xFF)   { _nkey_ = 98, _okey_ = 99;} // this differntiates btw a key gap , sends oxff when a key is nt pressed
 		if(_nkey_ == _okey_) { _nkey_ = 0xFF;}
 		
-		if ((_nkey_!= 0xFF)&(_nkey_!=98))
+		if((_nkey_!= 0xFF)&(_nkey_!=98))
 		{		
 		//USART_Transmit(keymap[_nkey_]); //  a variable should hold this value									
 		_okey_=_nkey_;

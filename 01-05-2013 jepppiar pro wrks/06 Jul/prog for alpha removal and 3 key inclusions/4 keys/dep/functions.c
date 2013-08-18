@@ -28,12 +28,12 @@ void USART_Init( unsigned int baud )
 
 void USART_RxIntEN(void)
 {
-        UCSR0B|=(1 << RXCIE0 );
+        UCSR0B|=(1 << RXCIE0 )|(1 << RXEN0);
 }
 
 void USART_RxIntDE(void)
 {
-        UCSR0B&=~(1 << RXCIE0 );
+        UCSR0B&=~((1 << RXCIE0 )|(1 << RXEN0));
 }
 
 void USART_Transmit( unsigned int data )

@@ -16,8 +16,8 @@ int _av=0, _ch=0, km=0;
 #define c3 PB2
 #define c4 PB3
 
-uint8_t _okey_,_nkey_,d_nkey=5,ext=0,menu=0,d_menu=0,o_sec=0;	// 
-
+uint8_t _okey_,_nkey_,d_nkey=5,ext=0,d_menu=0,o_sec=0;	// 
+int menu=0;
 
 void lcddata(uint8_t *value, unsigned int limit);
 void lcdnumdata(uint8_t,uint8_t,uint8_t); 
@@ -37,6 +37,10 @@ uint8_t ar5[]="T-OUT";
 uint8_t ar6[]="QTR";
 uint8_t ar7[]="Enter Team A Name";
 uint8_t ar8[]="Enter Team B Name";
+uint8_t ar9[]=" Buz > Backspace ";
+uint8_t tA[]={'H','O','M','E',0x01};
+uint8_t tB[]={'A','W','A','Y',0x01};
+
 volatile uint8_t teama[10]={0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x00};
 volatile uint8_t teamb[10]={0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x00};
 //volatile uint8_t teamc[2]={'a','b',};
