@@ -15,6 +15,9 @@ uint8_t keypad_4keys(void);
 static int8_t indexA=0,indexB=0;
 volatile unsigned int rx_char=0;
 void sendNB(void);
+void ControlPanel(void);
+
+
 void GCDP_Tx(int state)
 {
   GCSP=state;
@@ -85,6 +88,7 @@ int main(void)
 	TCNT1=0xBDB; // set initial value to remove time error (16bit counter register)
 	TCCR1B = (1<<CS12)|(0<<CS11)|(0<<CS10); // start timer/ set clock
 	//GCSP=1;
+	Timer3EN();
 	GCDP_Tx(1);
 
 	picture(&sportronix[0]);
@@ -100,7 +104,6 @@ int main(void)
 		if(menu == 3)
 		{
 		  USART_RxIntEN();
-		  Timer3EN();
           dispclear();
 		  renderDisp();
 		  menu++;
@@ -150,6 +153,10 @@ int main(void)
 		if(_av==2) // home button
 		{
 			//_ch=0;
+			if(menu==0)
+			{
+			   ControlPanel();
+			}
 			menu++;
 			sendNB(); // Send the data to main board
 			if(menu!=0)
@@ -161,7 +168,7 @@ int main(void)
 				menu=1;			// exit out of the menu and capture the team names
 				_ch=0;
 				USART_RxIntDE();
-				Timer3DIS();
+				//Timer3DIS();
 			}
 			//USART_Transmit(2);
 		}
@@ -748,4 +755,56 @@ void sendNB(void)
    }
 
 
+}
+
+void ControlPanel(void)
+{
+  	 clrlcd();
+	 lcdputs2(16,0,cp0);//title
+	 lcdputs2(5,2,cp3);
+	 lcdputs2(60,2,cp1);//on
+	 setcolumn(90);
+     setpage(2);
+	 cpSelection=1;//def
+	 cpStatus[0]=1;//def
+	 lcddata(&font5x7[475],5);//arro >
+	 while(1)
+	 {
+	 	_av=keypad_4keys();
+		if(_av==2)
+		{
+		  break;
+		}
+		else if(_av==1)
+		{
+		  switch(cpSelection)
+		  {
+		  
+		    case 1:
+			 if(cpStatus[0]==1)
+			 {
+				 lcdputs2(60,2,cp2);//off
+				 setcolumn(90);
+				 setpage(2);
+				 cpSelection=1;
+				 lcddata(&font5x7[475],5);//arro >
+				 cpStatus[0] = 0;
+				 Timer3DIS();
+			 }
+			 else
+			 {
+				 lcdputs2(60,2,cp1);//on
+				 setcolumn(90);
+				 setpage(2);
+				 cpSelection=1;
+				 lcddata(&font5x7[475],5);//arro >	
+				 cpStatus[0] = 1;
+				 Timer3EN();
+			 }
+			 break;
+		  }
+		}
+     
+	 
+	 }
 }

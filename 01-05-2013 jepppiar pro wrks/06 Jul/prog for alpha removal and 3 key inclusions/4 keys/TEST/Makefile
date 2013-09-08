@@ -41,7 +41,7 @@
 
 
 # MCU name
-MCU = atmega16
+MCU = atmega128
 
 
 # Processor frequency.
@@ -70,7 +70,7 @@ FORMAT = ihex
 
 
 # Target file name (without extension).
-TARGET = T2
+TARGET = led
 
 
 # Object files directory

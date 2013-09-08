@@ -45,6 +45,16 @@ volatile uint8_t teama[10]={0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x00};
 volatile uint8_t teamb[10]={0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x00};
 //volatile uint8_t teamc[2]={'a','b',};
 
+
+//ControlPanel
+volatile int8_t cpSelection=0,cpStatus[5];
+
+uint8_t cp0[]="  Control Panel  ";
+uint8_t cp1[]=" ON  ";
+uint8_t cp2[]=" OFF ";
+uint8_t cp3[]="24s Clock:";
+
+
 /*	    lcdputs2(33,0,ar0);
 		lcdputs2(16,1,ar1);
 		lcdputs2(80,1,ar2);
