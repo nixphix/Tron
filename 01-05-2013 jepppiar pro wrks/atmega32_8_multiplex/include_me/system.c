@@ -76,7 +76,7 @@
 		 }
        if(arr==1)	
 		 {
-		   dis2_PORT |= (1<<PB4); // PB3 ,4
+		   dis2_PORT |= (1<<PB5) | (1<<PB6); // PB3 ,4
 		  // dis2_PORT |= 0b00011000; // PB3 ,4
 		 }
       /* if(Buz==1)	
@@ -94,7 +94,7 @@
 		dis2_PORT = 0x00;
 	   if(one==1)	
 		 {
-		   dis2_PORT = (1<<PB1)|(1<<PB2);
+		   dis2_PORT |= (1<<PB1)|(1<<PB2);
 		 }
 		else if(one==0)	
 		 {
@@ -102,7 +102,7 @@
 		 }
        if(arr==0)	
 		 {
-		   dis2_PORT |= (1<<PB4); // PB3 ,4
+		   dis2_PORT &= ~((1<<PB5) | (1<<PB6)); // PB3 ,4
 		 }	
 		
   } 
